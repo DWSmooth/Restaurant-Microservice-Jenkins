@@ -25,4 +25,6 @@ public class RestaurantController {
         return ResponseEntity.status(HttpStatus.OK).body(restaurantService.getRestaurantDetails(restaurantId));
     }
 
+    
+
 }

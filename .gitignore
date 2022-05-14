@@ -1,2 +1,3 @@
 # Mac data files #
 .DS_Store
+restaurant-microservice/src/main/resources/application-dev.properties

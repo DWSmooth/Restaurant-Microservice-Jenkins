@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.smoothstack.common.models.Restaurant;
+import com.smoothstack.common.models.MenuItem;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,8 @@ public class RestaurantInformation {
     // matches to owner_id
     private String owner_name;
 
+
+
     public static RestaurantInformation getFrontendData(Restaurant restaurant){
         return RestaurantInformation.builder()
                 .restaurantId(restaurant.getId())
@@ -45,6 +48,7 @@ public class RestaurantInformation {
                 .zip_code(restaurant.getLocation().getZipCode())
 
                 .owner_name(restaurant.getOwner().getUserName())
+
                 .build();
     }
 
