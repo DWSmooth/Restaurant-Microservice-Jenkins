@@ -1,13 +1,17 @@
 package com.smoothstack.restaurantmicroservice;
 
+import com.smoothstack.common.models.User;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-//@SpringBootTest
+@SpringBootTest
 class RestaurantMicroserviceApplicationTests {
 
-//	@Test
-//	void contextLoads() {
-//	}
+	@Test
+    @Disabled
+	void contextLoads() {
+	}
+
 
 }
