@@ -52,4 +52,22 @@ public class RestaurantInformation {
                 .build();
     }
 
+
+    public static RestaurantInformation getNewRestaurant(Restaurant restaurant) {
+        return RestaurantInformation.builder()
+                .restaurantId(restaurant.getId())
+                .location_id(restaurant.getLocation().getId())
+                .owner_id(restaurant.getOwner().getId())
+                .name(restaurant.getName())
+
+                .location_name(restaurant.getLocation().getLocationName())
+                .address(restaurant.getLocation().getAddress())
+                .city(restaurant.getLocation().getCity())
+                .state(restaurant.getLocation().getState())
+                .zip_code(restaurant.getLocation().getZipCode())
+
+                .owner_name(restaurant.getOwner().getUserName())
+
+                .build();
+    }
 }

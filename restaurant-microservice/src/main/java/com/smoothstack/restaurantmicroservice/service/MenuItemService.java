@@ -46,4 +46,14 @@ public class MenuItemService {
         return menuItems;
     }
 
+    public MenuItem createNewMenuItem(MenuItem menuItem){
+        try {
+            MenuItem newMenuItem = menuItemRepository.save(menuItem);
+            return menuItem;
+        } catch (Exception e){
+            return null;
+        }
+    }
+
+
 }

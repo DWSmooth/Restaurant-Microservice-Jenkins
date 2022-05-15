@@ -26,4 +26,13 @@ public class RestaurantService {
         }
     }
 
+    public Restaurant createNewRestaurant(Restaurant restaurant){
+        try {
+            Restaurant newRestaurant = restaurantRepository.save(restaurant);
+            return restaurant;
+        } catch (Exception e){
+            return null;
+        }
+    }
+
 }
