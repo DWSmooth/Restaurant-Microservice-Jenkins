@@ -29,5 +29,10 @@ public class MenuItemController {
         return ResponseEntity.status(HttpStatus.CREATED).body(menuItemService.createNewMenuItem(menuItem));
     }
 
+    @DeleteMapping(value = "restaurants/menuItems/{menuItemId}")
+    public ResponseEntity<String>deleteRestaurant(@PathVariable Integer menuItemId){
+        return ResponseEntity.status(HttpStatus.OK).body(menuItemService.deleteGivenMenuItem(menuItemId));
+    }
+
 
 }

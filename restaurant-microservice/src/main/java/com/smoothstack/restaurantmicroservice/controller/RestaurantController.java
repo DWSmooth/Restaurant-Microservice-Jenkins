@@ -1,6 +1,7 @@
 package com.smoothstack.restaurantmicroservice.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.smoothstack.common.models.Restaurant;
 import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
@@ -24,10 +25,13 @@ public class RestaurantController {
     }
 
     @PostMapping("/restaurants")
-    public ResponseEntity<Restaurant> createRestaurant(@RequestBody Restaurant restaurant){
+    public ResponseEntity<Restaurant>createRestaurant(@RequestBody Restaurant restaurant){
         return ResponseEntity.status(HttpStatus.CREATED).body(restaurantService.createNewRestaurant(restaurant));
     }
 
-    
+    @DeleteMapping(value = "/restaurants/{restaurantId}")
+    public ResponseEntity<String>deleteRestaurant(@PathVariable Integer restaurantId){
+        return ResponseEntity.status(HttpStatus.OK).body(restaurantService.deleteGivenRestaurant(restaurantId));
+    }
 
 }

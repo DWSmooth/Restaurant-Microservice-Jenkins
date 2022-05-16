@@ -56,4 +56,14 @@ public class MenuItemService {
     }
 
 
+    public String deleteGivenMenuItem(Integer id) {
+        try {
+            MenuItem oldMenuItem = menuItemRepository.getById(id);
+            menuItemRepository.deleteById(id);
+            return "Menu item has been deleted successfully";
+        } catch (Exception e){
+            return null;
+        }
+    }
+
 }
