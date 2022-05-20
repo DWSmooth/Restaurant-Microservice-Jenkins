@@ -32,6 +32,9 @@ public class RestaurantInformation {
     // matches to owner_id
     private String owner_name;
 
+    // matches to restayrant Tags;
+    private List<String> restaurantTags;
+
 
 
     public static RestaurantInformation getFrontendData(Restaurant restaurant){
@@ -48,6 +51,11 @@ public class RestaurantInformation {
                 .zip_code(restaurant.getLocation().getZipCode())
 
                 .owner_name(restaurant.getOwner().getUserName())
+                .restaurantTags(restaurant.getRestaurantTags()
+                        .stream()
+                        .map( tag -> tag.getName())
+                        .collect(Collectors.toList())
+                )
 
                 .build();
     }
@@ -67,6 +75,11 @@ public class RestaurantInformation {
                 .zip_code(restaurant.getLocation().getZipCode())
 
                 .owner_name(restaurant.getOwner().getUserName())
+                .restaurantTags(restaurant.getRestaurantTags()
+                        .stream()
+                        .map( tag -> tag.getName())
+                        .collect(Collectors.toList())
+                )
 
                 .build();
     }

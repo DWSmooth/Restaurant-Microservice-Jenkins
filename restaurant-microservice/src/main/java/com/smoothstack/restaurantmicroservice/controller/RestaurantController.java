@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.smoothstack.common.models.Restaurant;
+import com.smoothstack.restaurantmicroservice.data.MenuItemInformation;
 import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
 import com.smoothstack.restaurantmicroservice.service.RestaurantService;
 
@@ -19,6 +20,12 @@ public class RestaurantController {
     @Autowired
     RestaurantService restaurantService;
 
+
+    @GetMapping(value = "/restaurants")
+    public ResponseEntity<List<RestaurantInformation>>getRestaurants(){
+        return ResponseEntity.status(HttpStatus.OK).body(restaurantService.getRestaurants());
+    }
+
     @GetMapping(value = "/restaurants/{restaurantId}")
     public ResponseEntity<RestaurantInformation>getRestaurantDetails(@PathVariable Integer restaurantId){
         return ResponseEntity.status(HttpStatus.OK).body(restaurantService.getRestaurantDetails(restaurantId));
@@ -29,7 +36,20 @@ public class RestaurantController {
         return ResponseEntity.status(HttpStatus.CREATED).body(restaurantService.createNewRestaurant(restaurant));
     }
 
-    @DeleteMapping(value = "/restaurants/{restaurantId}")
+    @PutMapping("/restaurants/{restaurantId}")
+    public ResponseEntity<Restaurant>updateRestaurant(@PathVariable Integer restaurantId, @RequestBody Restaurant restaurant){
+        return ResponseEntity.status(HttpStatus.OK).body(restaurantService.updateGivenRestaurant(restaurant, restaurantId));
+    }
+
+
+    @PutMapping("/restaurants/{restaurantId}/{restaurantTagId}")
+    public ResponseEntity<Restaurant>updateRestaurantTag(@PathVariable Integer restaurantId, @PathVariable Integer restaurantTagId) {
+        return ResponseEntity.status(HttpStatus.OK).body(restaurantService.updateGivenRestaurantTags(restaurantId, restaurantTagId));
+    }
+
+
+
+        @DeleteMapping(value = "/restaurants/{restaurantId}")
     public ResponseEntity<String>deleteRestaurant(@PathVariable Integer restaurantId){
         return ResponseEntity.status(HttpStatus.OK).body(restaurantService.deleteGivenRestaurant(restaurantId));
     }

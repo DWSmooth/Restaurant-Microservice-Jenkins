@@ -6,6 +6,7 @@ import com.smoothstack.common.repositories.MenuItemRepository;
 import com.smoothstack.common.repositories.RestaurantRepository;
 
 import com.smoothstack.restaurantmicroservice.data.MenuItemInformation;
+import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,20 @@ public class MenuItemService {
 
     @Autowired
     RestaurantRepository restaurantRepository;
+
+    public List<MenuItemInformation> getAllMenuItems(){
+        try {
+            List<MenuItemInformation> menuItems = new ArrayList<MenuItemInformation>();
+            List<MenuItem> dbMenuItems = menuItemRepository.findAll();
+            for(MenuItem m: dbMenuItems){
+                menuItems.add(MenuItemInformation.getFrontendData(m));
+            }
+            return menuItems;
+        } catch (Exception e){
+            return null;
+        }
+    }
+
 
     public List<MenuItemInformation> getMenuItemDetails(Integer restaurantId){
         try {
@@ -50,6 +65,20 @@ public class MenuItemService {
         try {
             MenuItem newMenuItem = menuItemRepository.save(menuItem);
             return menuItem;
+        } catch (Exception e){
+            return null;
+        }
+    }
+
+
+    public MenuItem updateGivenMenuItem(MenuItem newMenuItem, Integer menuItemId){
+        try {
+            MenuItem currentMenuItem = menuItemRepository.getById(menuItemId);
+            currentMenuItem.setRestaurants(newMenuItem.getRestaurants());
+            currentMenuItem.setName(newMenuItem.getName());
+            currentMenuItem.setDescription(newMenuItem.getDescription());
+            currentMenuItem.setPrice(newMenuItem.getPrice());
+            return menuItemRepository.save(currentMenuItem);
         } catch (Exception e){
             return null;
         }
