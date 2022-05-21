@@ -6,7 +6,8 @@ import com.smoothstack.common.repositories.MenuItemRepository;
 import com.smoothstack.common.repositories.RestaurantRepository;
 
 import com.smoothstack.restaurantmicroservice.data.MenuItemInformation;
-import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
+import com.smoothstack.restaurantmicroservice.exception.MenuItemNotFoundException;
+import com.smoothstack.restaurantmicroservice.exception.RestaurantNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,8 +32,9 @@ public class MenuItemService {
             }
             return menuItems;
         } catch (Exception e){
-            return null;
+            e.printStackTrace();
         }
+        return null;
     }
 
 
@@ -40,13 +42,15 @@ public class MenuItemService {
         try {
             List<MenuItemInformation> restaurantMenuItems = new ArrayList<MenuItemInformation>();
             List<MenuItem> menuItems = getMenuItems(restaurantId);
+            if(getMenuItems(restaurantId) == null) throw new MenuItemNotFoundException("restaurantId-" + restaurantId);
             for(MenuItem m: menuItems){
                 restaurantMenuItems.add(MenuItemInformation.getFrontendData(m));
             }
             return restaurantMenuItems;
         } catch (Exception e){
-            return null;
+            e.printStackTrace();
         }
+        return null;
     }
 
     private List<MenuItem> getMenuItems(Integer restaurantId){
@@ -54,11 +58,13 @@ public class MenuItemService {
         List<MenuItem> menuItems = new ArrayList<MenuItem>();
         try {
             restaurant = restaurantRepository.getById(restaurantId);
+            if(restaurant.getId() == null) throw new RestaurantNotFoundException("restaurantId-" + restaurantId);
             menuItems = menuItemRepository.findAllByRestaurants(restaurant);
+            return menuItems;
         } catch(Exception e){
-            return null;
+            e.printStackTrace();
         }
-        return menuItems;
+        return null;
     }
 
     public MenuItem createNewMenuItem(MenuItem menuItem){
@@ -66,22 +72,25 @@ public class MenuItemService {
             MenuItem newMenuItem = menuItemRepository.save(menuItem);
             return menuItem;
         } catch (Exception e){
-            return null;
+            e.printStackTrace();
         }
+        return null;
     }
 
 
     public MenuItem updateGivenMenuItem(MenuItem newMenuItem, Integer menuItemId){
         try {
             MenuItem currentMenuItem = menuItemRepository.getById(menuItemId);
+            if(currentMenuItem.getId() == null) throw new MenuItemNotFoundException("menuItemId-" + menuItemId);
             currentMenuItem.setRestaurants(newMenuItem.getRestaurants());
             currentMenuItem.setName(newMenuItem.getName());
             currentMenuItem.setDescription(newMenuItem.getDescription());
             currentMenuItem.setPrice(newMenuItem.getPrice());
             return menuItemRepository.save(currentMenuItem);
         } catch (Exception e){
-            return null;
+            e.printStackTrace();
         }
+        return null;
     }
 
 
@@ -91,8 +100,9 @@ public class MenuItemService {
             menuItemRepository.deleteById(id);
             return "Menu item has been deleted successfully";
         } catch (Exception e){
-            return null;
+            e.printStackTrace();
         }
+        return "That MenuItem could not be deleted. Please try again.";
     }
 
 }

@@ -6,6 +6,8 @@ import com.smoothstack.common.models.RestaurantTag;
 import com.smoothstack.common.repositories.RestaurantRepository;
 import com.smoothstack.common.repositories.RestaurantTagRepository;
 import com.smoothstack.restaurantmicroservice.data.MenuItemInformation;
+import com.smoothstack.restaurantmicroservice.exception.MenuItemNotFoundException;
+import com.smoothstack.restaurantmicroservice.exception.RestaurantTagNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +51,7 @@ public class RestaurantTagService {
 public RestaurantTag updateGivenRestaurantTag(RestaurantTag newRestaurantTag, Integer restaurantTagId){
     try {
         RestaurantTag currentRestaurantTag = restaurantTagRepository.getById(restaurantTagId);
+        if(currentRestaurantTag.getId() == null) throw new RestaurantTagNotFoundException("restaurantTagId-" + restaurantTagId);
         currentRestaurantTag.setName(newRestaurantTag.getName());
         return restaurantTagRepository.save(currentRestaurantTag);
     } catch (Exception e){
@@ -63,8 +66,9 @@ public RestaurantTag updateGivenRestaurantTag(RestaurantTag newRestaurantTag, In
             restaurantTagRepository.deleteById(id);
             return "Restaurant Tag has been deleted successfully";
         } catch (Exception e){
-            return null;
+            e.printStackTrace();
         }
+        return "That Restaurant Tag could not be deleted. Please try again.";
     }
 
 
