@@ -4,14 +4,13 @@ This microservice performs CRUD operations for
 
 Restaurants - customers will find restaurants to order food items from.
 Menu Items - the food items belonging to a specific restaurant.
-Restaurant Tags - tags used to help narrow down a customers search for food items.
-***     Not yet implemented  ***
-***     Restaurant Reviews - customer reviews for restaurants.  *** 
+Restaurant Tags - tags used to help narrow down a customers search for food items.  ( Not yet implemented )
+Restaurant Reviews - customer reviews for restaurants.
 
 ## CRUD OPERATIONS
 
 ## GET
-###        Get all restaurants      -       /restaurants
+###        /restaurants - Get all restaurants
 
 
             will return
