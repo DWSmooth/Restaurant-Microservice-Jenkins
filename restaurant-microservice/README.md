@@ -12,8 +12,7 @@ Restaurant Reviews - customer reviews for restaurants.
 ## GET
 ###        /restaurants - Get all restaurants
 
-
-            will return
+            will return:
                 [
                     {
                         "restaurantId": 1,
@@ -34,11 +33,9 @@ Restaurant Reviews - customer reviews for restaurants.
                         "restaurantId": 2,
                     ....
            
-###        Get all menu items
-            /restaurants/menuItems
+###        /restaurants/menuItems - Get all menu items
 
-            returns:
-                ```js
+            will return:
                 [
                     {
                         "itemId": 1,
@@ -51,12 +48,11 @@ Restaurant Reviews - customer reviews for restaurants.
                     {
                         "itemId": 2,
                     ....
-                ```
 
-###        Get all restaurant tags
-            /restaurants/restaurantTags
 
-            returns:
+###       /restaurants/restaurantTags -  Get all restaurant tags
+
+            will return:
                 ```js
                 [
                     {
@@ -67,11 +63,9 @@ Restaurant Reviews - customer reviews for restaurants.
                         "id": 2,
                     ....
                 ```
-###        Get restaurant by id
-            /restaurants/{restaurantId}
+###        /restaurants/{restaurantId} - Get restaurant by id
 
-            returns:
-                ```js
+            will return:
                 {
                     "restaurantId": 1,
                     "location_id": 1,
@@ -87,15 +81,10 @@ Restaurant Reviews - customer reviews for restaurants.
                         "Asian"
                     ]
                 }
-                ```
 
+###        /restaurants/{restaurantId}/menuItems - Get menu by restaurant id
 
-
-###        Get menu by restaurant id
-            /restaurants/{restaurantId}/menuItems
-
-            returns:
-                ```js
+            will return:
                 [
                     {
                         "itemId": 1,
@@ -106,16 +95,11 @@ Restaurant Reviews - customer reviews for restaurants.
                         "restaurant_name": null
                     }
                 ]
-                ```
-
-
 
 ## POST
-###        Create a restaurant
-            /restaurants
-
-            Post Data
-                ```js
+###        /restaurants - Create a restaurant
+            
+            Post Data:
                 {
                     "location": {
                         "id": 3
@@ -125,10 +109,8 @@ Restaurant Reviews - customer reviews for restaurants.
                     },
                     "name": "Leos Barbecue"
                 }
-                ```
 
-            returns:
-                ```js
+            will return:
                 {
                     "id": 3,
                     "location": {
@@ -152,14 +134,11 @@ Restaurant Reviews - customer reviews for restaurants.
                     "menuItems": null,
                     "restaurantTags": null
                 }
-                ```
 
 
-###        Create a menu item
-            /restaurants/menuItems
+###        /restaurants/menuItems - Create a menu item
 
-            Post Data
-                ```js
+            Post Data:
                 {
                     "restaurants": {
                         "id": 2
@@ -170,8 +149,7 @@ Restaurant Reviews - customer reviews for restaurants.
                 }
                 ```
 
-            returns:
-                ```js
+            will return:
                 {
                     "id": 3,
                     "restaurants": {
@@ -187,40 +165,31 @@ Restaurant Reviews - customer reviews for restaurants.
                     "price": 4.25,
                     "discounts": null
                 }
-                ```
 
-###        Create a restaurant tag
-            /restaurants/restaurantTags
+###        /restaurants/restaurantTags - Create a restaurant tag
+            
 
-            Post Data
-                ```js
+            Post Data:
                 {
                     "name": "deleteThisTag"
                 }
-                ```
             
-            returns:
-                ```js
+            will return:
                 {
                     "id": 4,
                     "name": "deleteThisTag"
                 }
-                ```
-
-
 
 ## PUT
-###        Update a restaurant
-            /restaurants/{restaurantId}
-            ```js
+###        /restaurants/{restaurantId} - Update a restaurant
+            
             currently errors out
-            ```
 
-###        Update a menu item
-            /restaurants/menuItems/{menuItemId}
+
+###        /restaurants/menuItems/{menuItemId} - Update a menu item
+            
 
             Put Data:
-                ```js
                 {
                     "restaurants": {
                         "id": 1
@@ -229,10 +198,8 @@ Restaurant Reviews - customer reviews for restaurants.
                     "description": "side order of bread sticks",
                     "price": 4.25
                 }
-                ```
 
-            returns:
-                ```js
+            will return:
                 {
                     "id": 3,
                     "restaurants": {
@@ -248,62 +215,50 @@ Restaurant Reviews - customer reviews for restaurants.
                     "price": 4.25,
                     "discounts": []
                 }
-                ```
 
-###        Update a restaurant tag
-            /restaurants/restaurantTags/{restaurantTagId}
 
+###        /restaurants/restaurantTags/{restaurantTagId} - Update a restaurant tag
+        
             Put Data:
-                ```js
                 {
                     "name": "Barbecue"
                 }
-                ```
 
-            returns:
-                ```js
+            will return:
                 {
                     "id": 4,
                     "name": "Barbecue"
                 }
-                ```
 
-###        Add a restaurant tag to an existing restaurant
-            /restaurants/{restaurantId}/{restaurantTagId}
+###         /restaurants/{restaurantId}/{restaurantTagId} - Add a restaurant tag to an existing restaurant
+           
 
             Put Data:
-                ```js
                 ---
                     No body data reuquired as we are passing the tag id through route params.
                 ---
-                ```
 
-            returns:
-                ```js
+            will return:
                 currently errors out
-                ```
+
 
 
 
 
 ## DELETE
-###        Delete a restaurant
-            /restaurants/{restaurantId}
+###        /restaurants/{restaurantId} - Delete a restaurant
             
-            returns:
-            ```js
+            will return:
                 Restaurant has been deleted successfully
-            ```
 
-###        Delete a menu item
-            /restaurants/menuItems/{menuItemId}
-            returns:
-            ```js
+
+###        /restaurants/menuItems/{menuItemId} - Delete a menu item
+            
+            will return:
                 Menu item has been deleted successfully
-            ```
 
-###        Delete a restaurant tag
-            returns:
-            ```js
+
+###        /restaurants/restaurantTags/{restaurantTagId} - Delete a restaurant tag
+            will return:
                 Restaurant Tag has been deleted successfully
-            ```
+
