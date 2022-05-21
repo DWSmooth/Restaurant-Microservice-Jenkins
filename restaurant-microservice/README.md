@@ -11,11 +11,10 @@ Restaurant Tags - tags used to help narrow down a customers search for food item
 ## CRUD OPERATIONS
 
 ## GET
-###        Get all restaurants
-            /restaurants
+###        Get all restaurants      -       /restaurants
 
-            returns:
-            ```js
+
+            will return
                 [
                     {
                         "restaurantId": 1,
@@ -35,7 +34,6 @@ Restaurant Tags - tags used to help narrow down a customers search for food item
                     {
                         "restaurantId": 2,
                     ....
-            ```
            
 ###        Get all menu items
             /restaurants/menuItems
