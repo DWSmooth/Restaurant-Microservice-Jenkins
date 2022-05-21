@@ -53,7 +53,6 @@ Restaurant Reviews - customer reviews for restaurants.
 ###       /restaurants/restaurantTags -  Get all restaurant tags
 
             will return:
-                ```js
                 [
                     {
                         "id": 1,
@@ -62,7 +61,7 @@ Restaurant Reviews - customer reviews for restaurants.
                     {
                         "id": 2,
                     ....
-                ```
+
 ###        /restaurants/{restaurantId} - Get restaurant by id
 
             will return:
@@ -110,6 +109,8 @@ Restaurant Reviews - customer reviews for restaurants.
                     "name": "Leos Barbecue"
                 }
 
+            ________________________________________________
+
             will return:
                 {
                     "id": 3,
@@ -147,7 +148,8 @@ Restaurant Reviews - customer reviews for restaurants.
                     "description": "spicy chicken served over mixed vegaetables or fried rice",
                     "price": 4.25
                 }
-                ```
+            
+            ________________________________________________
 
             will return:
                 {
@@ -174,6 +176,8 @@ Restaurant Reviews - customer reviews for restaurants.
                     "name": "deleteThisTag"
                 }
             
+            ________________________________________________
+            
             will return:
                 {
                     "id": 4,
@@ -182,8 +186,22 @@ Restaurant Reviews - customer reviews for restaurants.
 
 ## PUT
 ###        /restaurants/{restaurantId} - Update a restaurant
-            
-            currently errors out
+            Put Data:
+                {
+                    "location": {
+                        "id": 2
+                    },
+                    "owner": {
+                        "id": 2
+                    },
+                    "name": "Taqueria"
+                }
+
+            ________________________________________________
+
+             will return:
+
+                currently errors out with infinite loop
 
 
 ###        /restaurants/menuItems/{menuItemId} - Update a menu item
@@ -198,6 +216,8 @@ Restaurant Reviews - customer reviews for restaurants.
                     "description": "side order of bread sticks",
                     "price": 4.25
                 }
+            
+            ________________________________________________
 
             will return:
                 {
@@ -224,6 +244,9 @@ Restaurant Reviews - customer reviews for restaurants.
                     "name": "Barbecue"
                 }
 
+            
+            ________________________________________________
+
             will return:
                 {
                     "id": 4,
@@ -237,9 +260,11 @@ Restaurant Reviews - customer reviews for restaurants.
                 ---
                     No body data reuquired as we are passing the tag id through route params.
                 ---
+            
+            ________________________________________________
 
             will return:
-                currently errors out
+                currently errors out with infinite loop
 
 
 
