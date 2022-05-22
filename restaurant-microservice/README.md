@@ -285,5 +285,5 @@ Restaurant Reviews - customer reviews for restaurants.
 
 ###        /restaurants/restaurantTags/{restaurantTagId} - Delete a restaurant tag
             will return:
-                Restaurant Tag has been deleted successfully
+                Restaurant tag has been deleted successfully
 

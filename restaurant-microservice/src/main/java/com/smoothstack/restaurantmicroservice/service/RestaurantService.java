@@ -2,6 +2,8 @@ package com.smoothstack.restaurantmicroservice.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.smoothstack.common.models.Restaurant;
 import com.smoothstack.common.models.RestaurantTag;
@@ -11,8 +13,11 @@ import com.smoothstack.common.repositories.RestaurantTagRepository;
 import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
 import com.smoothstack.restaurantmicroservice.exception.RestaurantNotFoundException;
 import com.smoothstack.restaurantmicroservice.exception.RestaurantTagNotFoundException;
+import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 @Service
 public class RestaurantService {
@@ -23,13 +28,14 @@ public class RestaurantService {
     @Autowired
     RestaurantTagRepository restaurantTagRepository;
 
-
+    @Transactional
     public List<RestaurantInformation> getRestaurants(){
         try {
             List<RestaurantInformation> restaurants = new ArrayList<RestaurantInformation>();
             List<Restaurant> dbRestaurant = restaurantRepository.findAll();
             for(Restaurant r: dbRestaurant){
-                restaurants.add(RestaurantInformation.getFrontendData(r));
+                restaurants.add(getFrontendData(r.getId()));
+                System.out.println("restaurant: " + r.getId());
             }
             return restaurants;
         } catch (Exception e){
@@ -39,12 +45,17 @@ public class RestaurantService {
         return null;
     }
 
+    @Transactional
     public RestaurantInformation getRestaurantDetails(Integer restaurantId){
             Restaurant restaurant = restaurantRepository.getById(restaurantId);
-            if(restaurant.getId() == null) throw new RestaurantNotFoundException("restaurantId-" + restaurantId);
-            return RestaurantInformation.getFrontendData(restaurant);
+        System.out.println("restaurant id: " + restaurant.getId());
+        System.out.println("location id: " + restaurant.getLocation().getId());
+        System.out.println("owner id: " + restaurant.getOwner().getId());
+//            if(restaurant.getId() == null) throw new RestaurantNotFoundException("restaurantId-" + restaurantId);
+            return getFrontendData(restaurantId);
     }
 
+    @Transactional
     public Restaurant createNewRestaurant(Restaurant restaurant){
         try {
             Restaurant newRestaurant = restaurantRepository.save(restaurant);
@@ -54,6 +65,7 @@ public class RestaurantService {
         return restaurant;
     }
 
+    @Transactional
     public Restaurant updateGivenRestaurant(Restaurant newRestaurant, Integer restaurantId){
             Restaurant currentRestaurant = restaurantRepository.getById(restaurantId);
             if(currentRestaurant.getId() == null) throw new RestaurantNotFoundException("restaurantId-" + restaurantId);
@@ -63,6 +75,7 @@ public class RestaurantService {
                 return restaurantRepository.save(currentRestaurant);
     }
 
+    @Transactional
     public Restaurant updateGivenRestaurantTags(Integer restaurantId, Integer restaurantTagId){
             Restaurant currentRestaurant = restaurantRepository.getById(restaurantId);
             if(currentRestaurant.getId() == null) throw new RestaurantNotFoundException("restaurantId-" + restaurantId);
@@ -75,6 +88,7 @@ public class RestaurantService {
             return currentRestaurant;
     }
 
+    @Transactional
     public String deleteGivenRestaurant(Integer id) {
         try {
             Restaurant oldRestaurant = restaurantRepository.getById(id);
@@ -85,4 +99,74 @@ public class RestaurantService {
         }
         return "That Restaurant could not be deleted. Please try again.";
     }
+
+        @Transactional
+        public RestaurantInformation getFrontendData(Integer restaurantId){
+
+            Optional<Restaurant> restaurant = restaurantRepository.findById(restaurantId);
+            Restaurant restaurant1 = restaurant.get();
+            RestaurantInformation restaurantInformation = new RestaurantInformation();
+
+            //                .restaurantId(restaurant.getId())
+            restaurantInformation.setRestaurantId(restaurant1.getId());
+            //                .location_id(restaurant.getLocation().getId())
+            restaurantInformation.setLocation_id(restaurant1.getLocation().getId());
+            //                .owner_id(restaurant.getOwner().getId())
+            restaurantInformation.setOwner_id(restaurant1.getOwner().getId());
+            //                .name(restaurant.getName())
+            restaurantInformation.setName(restaurant1.getName());
+
+
+//                .location_name(restaurant.getLocation().getLocationName())
+            restaurantInformation.setLocation_name(restaurant1.getLocation().getLocationName());
+//                .address(restaurant.getLocation().getAddress())
+            restaurantInformation.setAddress(restaurant1.getLocation().getAddress());
+//                .city(restaurant.getLocation().getCity())
+            restaurantInformation.setCity(restaurant1.getLocation().getCity());
+//                .state(restaurant.getLocation().getState())
+            restaurantInformation.setState(restaurant1.getLocation().getState());
+//                .zip_code(restaurant.getLocation().getZipCode())
+            restaurantInformation.setZip_code(restaurant1.getLocation().getZipCode());
+
+//                .owner_name(restaurant.getOwner().getUserName())
+            restaurantInformation.setOwner_name(restaurant1.getOwner().getUserName());
+
+//                .restaurantTags(restaurant.getRestaurantTags()
+//                        .stream()
+//                        .map( tag -> tag.getName())
+//                        .collect(Collectors.toList())
+//                )
+            restaurantInformation.setRestaurantTags(restaurant1.getRestaurantTags()
+                    .stream()
+                    .map( tag -> tag.getName())
+                        .collect(Collectors.toList())
+            );
+
+            return restaurantInformation;
+
+    }
+
+
+//        public static RestaurantInformation getNewRestaurant(Restaurant restaurant) {
+//        return RestaurantInformation.builder()
+//                .restaurantId(restaurant.getId())
+//                .location_id(restaurant.getLocation().getId())
+//                .owner_id(restaurant.getOwner().getId())
+//                .name(restaurant.getName())
+//
+//                .location_name(restaurant.getLocation().getLocationName())
+//                .address(restaurant.getLocation().getAddress())
+//                .city(restaurant.getLocation().getCity())
+//                .state(restaurant.getLocation().getState())
+//                .zip_code(restaurant.getLocation().getZipCode())
+//
+//                .owner_name(restaurant.getOwner().getUserName())
+//                .restaurantTags(restaurant.getRestaurantTags()
+//                        .stream()
+//                        .map( tag -> tag.getName())
+//                        .collect(Collectors.toList())
+//                )
+//
+//                .build();
+//    }
 }
