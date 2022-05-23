@@ -11,8 +11,10 @@ import com.smoothstack.restaurantmicroservice.exception.RestaurantNotFoundExcept
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MenuItemService {
@@ -23,12 +25,13 @@ public class MenuItemService {
     @Autowired
     RestaurantRepository restaurantRepository;
 
+    @Transactional
     public List<MenuItemInformation> getAllMenuItems(){
         try {
             List<MenuItemInformation> menuItems = new ArrayList<MenuItemInformation>();
             List<MenuItem> dbMenuItems = menuItemRepository.findAll();
             for(MenuItem m: dbMenuItems){
-                menuItems.add(MenuItemInformation.getFrontendData(m));
+                menuItems.add(getFrontendData(m.getId()));
             }
             return menuItems;
         } catch (Exception e){
@@ -37,14 +40,14 @@ public class MenuItemService {
         return null;
     }
 
-
+    @Transactional
     public List<MenuItemInformation> getMenuItemDetails(Integer restaurantId){
         try {
             List<MenuItemInformation> restaurantMenuItems = new ArrayList<MenuItemInformation>();
             List<MenuItem> menuItems = getMenuItems(restaurantId);
             if(getMenuItems(restaurantId) == null) throw new MenuItemNotFoundException("restaurantId-" + restaurantId);
             for(MenuItem m: menuItems){
-                restaurantMenuItems.add(MenuItemInformation.getFrontendData(m));
+                restaurantMenuItems.add(getFrontendData(m.getId()));
             }
             return restaurantMenuItems;
         } catch (Exception e){
@@ -53,6 +56,7 @@ public class MenuItemService {
         return null;
     }
 
+    @Transactional
     private List<MenuItem> getMenuItems(Integer restaurantId){
         Restaurant restaurant = new Restaurant();
         List<MenuItem> menuItems = new ArrayList<MenuItem>();
@@ -67,6 +71,7 @@ public class MenuItemService {
         return null;
     }
 
+    @Transactional
     public MenuItem createNewMenuItem(MenuItem menuItem){
         try {
             MenuItem newMenuItem = menuItemRepository.save(menuItem);
@@ -77,7 +82,7 @@ public class MenuItemService {
         return null;
     }
 
-
+    @Transactional
     public MenuItem updateGivenMenuItem(MenuItem newMenuItem, Integer menuItemId){
         try {
             MenuItem currentMenuItem = menuItemRepository.getById(menuItemId);
@@ -93,7 +98,7 @@ public class MenuItemService {
         return null;
     }
 
-
+    @Transactional
     public String deleteGivenMenuItem(Integer id) {
         try {
             MenuItem oldMenuItem = menuItemRepository.getById(id);
@@ -104,5 +109,20 @@ public class MenuItemService {
         }
         return "That MenuItem could not be deleted. Please try again.";
     }
+
+    @Transactional
+    public MenuItemInformation getFrontendData(Integer menuItemId){
+        Optional<MenuItem> menuItem = menuItemRepository.findById(menuItemId);
+        MenuItem menuItem1 = menuItem.get();
+        MenuItemInformation menuItemInformation = new MenuItemInformation();
+        menuItemInformation.setItemId(menuItem1.getId());
+        menuItemInformation.setRestaurants_id(menuItem1.getRestaurants().getId());
+        menuItemInformation.setName(menuItem1.getName());
+        menuItemInformation.setDescription(menuItem1.getDescription());
+        menuItemInformation.setPrice(menuItem1.getPrice());
+        menuItemInformation.setRestaurant_name(menuItem1.getRestaurants().getName());
+        return menuItemInformation;
+    }
+
 
 }

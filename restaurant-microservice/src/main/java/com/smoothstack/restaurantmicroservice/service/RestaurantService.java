@@ -13,7 +13,6 @@ import com.smoothstack.common.repositories.RestaurantTagRepository;
 import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
 import com.smoothstack.restaurantmicroservice.exception.RestaurantNotFoundException;
 import com.smoothstack.restaurantmicroservice.exception.RestaurantTagNotFoundException;
-import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -106,67 +105,24 @@ public class RestaurantService {
             Optional<Restaurant> restaurant = restaurantRepository.findById(restaurantId);
             Restaurant restaurant1 = restaurant.get();
             RestaurantInformation restaurantInformation = new RestaurantInformation();
-
-            //                .restaurantId(restaurant.getId())
             restaurantInformation.setRestaurantId(restaurant1.getId());
-            //                .location_id(restaurant.getLocation().getId())
             restaurantInformation.setLocation_id(restaurant1.getLocation().getId());
-            //                .owner_id(restaurant.getOwner().getId())
             restaurantInformation.setOwner_id(restaurant1.getOwner().getId());
-            //                .name(restaurant.getName())
             restaurantInformation.setName(restaurant1.getName());
 
-
-//                .location_name(restaurant.getLocation().getLocationName())
             restaurantInformation.setLocation_name(restaurant1.getLocation().getLocationName());
-//                .address(restaurant.getLocation().getAddress())
             restaurantInformation.setAddress(restaurant1.getLocation().getAddress());
-//                .city(restaurant.getLocation().getCity())
             restaurantInformation.setCity(restaurant1.getLocation().getCity());
-//                .state(restaurant.getLocation().getState())
             restaurantInformation.setState(restaurant1.getLocation().getState());
-//                .zip_code(restaurant.getLocation().getZipCode())
             restaurantInformation.setZip_code(restaurant1.getLocation().getZipCode());
 
-//                .owner_name(restaurant.getOwner().getUserName())
             restaurantInformation.setOwner_name(restaurant1.getOwner().getUserName());
 
-//                .restaurantTags(restaurant.getRestaurantTags()
-//                        .stream()
-//                        .map( tag -> tag.getName())
-//                        .collect(Collectors.toList())
-//                )
             restaurantInformation.setRestaurantTags(restaurant1.getRestaurantTags()
                     .stream()
-                    .map( tag -> tag.getName())
+                    .map(tag -> tag.getName())
                         .collect(Collectors.toList())
             );
-
             return restaurantInformation;
-
     }
-
-
-//        public static RestaurantInformation getNewRestaurant(Restaurant restaurant) {
-//        return RestaurantInformation.builder()
-//                .restaurantId(restaurant.getId())
-//                .location_id(restaurant.getLocation().getId())
-//                .owner_id(restaurant.getOwner().getId())
-//                .name(restaurant.getName())
-//
-//                .location_name(restaurant.getLocation().getLocationName())
-//                .address(restaurant.getLocation().getAddress())
-//                .city(restaurant.getLocation().getCity())
-//                .state(restaurant.getLocation().getState())
-//                .zip_code(restaurant.getLocation().getZipCode())
-//
-//                .owner_name(restaurant.getOwner().getUserName())
-//                .restaurantTags(restaurant.getRestaurantTags()
-//                        .stream()
-//                        .map( tag -> tag.getName())
-//                        .collect(Collectors.toList())
-//                )
-//
-//                .build();
-//    }
 }

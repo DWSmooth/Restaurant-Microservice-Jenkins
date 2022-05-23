@@ -7,32 +7,24 @@ import com.smoothstack.common.services.CommonLibraryTestingService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-//import com.smoothstack.common.models.MenuItem;
-//import com.smoothstack.common.repositories.MenuItemRepository;
-//import com.smoothstack.common.models.RestaurantTag;
-//import com.smoothstack.common.repositories.RestaurantTagRepository;
-//import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 
 import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
-import com.smoothstack.restaurantmicroservice.exception.RestaurantNotFoundException;
-import com.smoothstack.restaurantmicroservice.exception.RestaurantTagNotFoundException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @SpringBootTest
+@TestMethodOrder(OrderAnnotation.class)
 public class RestaurantServiceTest {
 
     @Autowired
     RestaurantService restaurantService;
-
     @Autowired
     RestaurantRepository restaurantRepository;
 
@@ -41,58 +33,17 @@ public class RestaurantServiceTest {
 
     @Autowired
     UserRepository userRepository;
-
     @Autowired
     UserInformationRepository userInformationRepository;
-
     @Autowired
     LocationRepository locationRepository;
-
     @Autowired
     CommonLibraryTestingService testingService;
 
-//    @Autowired
-//    MenuItemRepository menuItemRepository;
-
-//    @Autowired
-//    RestaurantTagRepository restaurantTagRepository;
-
     @BeforeEach
-//    @Disabled
     public void setUpTestEnvironment(){
         testingService.createTestData();
-//        User testUser = new User();
-//        testUser.setUserName("testUser");
-//        testUser.setPassword("testPassword");
-//        testUser = userRepository.saveAndFlush(testUser);
-//
-//        System.out.println("Created User");
-//
-//        Location noodlesLocation = new Location();
-//        noodlesLocation.setAddress("400 S Duff Ave");
-//        noodlesLocation.setCity("Ames");
-//        noodlesLocation.setState("Iowa");
-//        noodlesLocation.setZipCode(50010);
-//        noodlesLocation = locationRepository.saveAndFlush(noodlesLocation);
-//
-//        System.out.println("Created Location");
-//
-//        Restaurant noodlesAndCo = new Restaurant();
-//        noodlesAndCo.setName("Noodles & Company");
-//        noodlesAndCo.setOwner(testUser);
-//        noodlesAndCo.setLocation(noodlesLocation);
-//        noodlesAndCo = restaurantRepository.saveAndFlush(noodlesAndCo);
-//
-//        System.out.println("Created Restaurant");
-
     }
-
-//    List<RestaurantInformation> restaurants = new ArrayList<RestaurantInformation>();
-//    List<Restaurant> dbRestaurant = restaurantRepository.findAll();
-//            for(Restaurant r: dbRestaurant){
-//        restaurants.add(getFrontendData(r.getId()));
-//        System.out.println("restaurant: " + r.getId());
-//    }
 
     @Test
     public void returnsAllRestaurants(){
@@ -109,10 +60,12 @@ public class RestaurantServiceTest {
 
     @Test
     public void returnsCorrectRestaurantDetails(){
-        Optional<Restaurant> testRestaurant = restaurantRepository.findById(1);
-        RestaurantInformation restaurantInformation = restaurantService.getRestaurantDetails(1);
+        Optional<Restaurant> testRestaurant = restaurantRepository.findById(2);
+        System.out.println("restaurantID: " + testRestaurant.get().getId());
+        System.out.println("restaurantName: " + testRestaurant.get().getName());
+        RestaurantInformation restaurantInformation = restaurantService.getRestaurantDetails(2);
         System.out.println("Checking restaurant name is Noodles & Company");
-        assertEquals("Noodles & Company", testRestaurant.get().getName());
+        assertEquals(restaurantInformation.getName(), testRestaurant.get().getName());
     }
 
 
@@ -133,7 +86,6 @@ public class RestaurantServiceTest {
         newRestaurant.setName("Test Restaurant");
         newRestaurant.setOwner(testUser);
         newRestaurant.setLocation(testLocation);
-//        newRestaurant = restaurantRepository.saveAndFlush(newRestaurant);
         Restaurant returnedRestaurant = restaurantService.createNewRestaurant(newRestaurant);
         System.out.println("Created Restaurant");
 
@@ -145,11 +97,10 @@ public class RestaurantServiceTest {
     public void returnsUpdatedRestaurant(){
         Optional<Restaurant> dbRestaurant = restaurantRepository.findById(1);
         Restaurant testRestaurant = dbRestaurant.get();
-
         testRestaurant.setName("Oliver & Company");
         Restaurant returnedRestaurant = restaurantService.updateGivenRestaurant(testRestaurant, 1);
         System.out.println("Checking restaurant name is Oliver & Company");
-        assertEquals("Oliver & Company", testRestaurant.getName());
+        assertEquals(returnedRestaurant.getName(), testRestaurant.getName());
     }
 
 
@@ -157,14 +108,14 @@ public class RestaurantServiceTest {
     @Disabled
     public void returnsUpdatedRestaurantTags(){
         Optional<Restaurant> dbRestaurant = restaurantRepository.findById(1);
-        List<RestaurantTag> dbRestaurantTags = dbRestaurant.get().getRestaurantTags();
-        System.out.println("tags: " + dbRestaurantTags);
         Restaurant testRestaurant = dbRestaurant.get();
-
-        testRestaurant.setName("Oliver & Company");
-        Restaurant returnedRestaurant = restaurantService.updateGivenRestaurant(testRestaurant, 1);
-        System.out.println("Checking restaurant name is Oliver & Company");
-        assertEquals("Oliver & Company", testRestaurant.getName());
+        List<String> dbRestaurantTags = dbRestaurant.get().getRestaurantTags()
+                .stream()
+                    .map(tag -> tag.getName())
+            .collect(Collectors.toList());
+            for(String s: dbRestaurantTags){
+                System.out.println("tags: " + s);
+            }
     }
 
 
@@ -192,7 +143,9 @@ public class RestaurantServiceTest {
     }
 
     @AfterEach
+    @Disabled
     void tearDown() {
-        testingService = null;
+//        testingService = null;
+//         this doesn't work, need a way to wipe all data after each test
     }
 }

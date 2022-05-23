@@ -14,7 +14,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class RestaurantInformation {
 
     private Integer restaurantId;

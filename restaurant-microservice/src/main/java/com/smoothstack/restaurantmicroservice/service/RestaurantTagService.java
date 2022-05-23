@@ -1,29 +1,22 @@
 package com.smoothstack.restaurantmicroservice.service;
 
-import com.smoothstack.common.models.MenuItem;
-import com.smoothstack.common.models.Restaurant;
 import com.smoothstack.common.models.RestaurantTag;
-import com.smoothstack.common.repositories.RestaurantRepository;
 import com.smoothstack.common.repositories.RestaurantTagRepository;
-import com.smoothstack.restaurantmicroservice.data.MenuItemInformation;
-import com.smoothstack.restaurantmicroservice.exception.MenuItemNotFoundException;
 import com.smoothstack.restaurantmicroservice.exception.RestaurantTagNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class RestaurantTagService {
     @Autowired
-    RestaurantRepository restaurantRepository;
-
-    @Autowired
     RestaurantTagRepository restaurantTagRepository;
 
 
-
+    @Transactional
     public List<RestaurantTag> getAllRestaurantTags(){
         List<RestaurantTag> restaurantTags = new ArrayList<RestaurantTag>();
         try {
@@ -38,6 +31,7 @@ public class RestaurantTagService {
         }
     }
 
+    @Transactional
     public RestaurantTag createNewRestaurantTag(RestaurantTag restaurantTag){
         try {
             RestaurantTag restaurantTag1 = restaurantTagRepository.save(restaurantTag);
@@ -47,19 +41,19 @@ public class RestaurantTagService {
         }
     }
 
-
-public RestaurantTag updateGivenRestaurantTag(RestaurantTag newRestaurantTag, Integer restaurantTagId){
-    try {
-        RestaurantTag currentRestaurantTag = restaurantTagRepository.getById(restaurantTagId);
-        if(currentRestaurantTag.getId() == null) throw new RestaurantTagNotFoundException("restaurantTagId-" + restaurantTagId);
-        currentRestaurantTag.setName(newRestaurantTag.getName());
-        return restaurantTagRepository.save(currentRestaurantTag);
-    } catch (Exception e){
-        return null;
+    @Transactional
+    public RestaurantTag updateGivenRestaurantTag(RestaurantTag newRestaurantTag, Integer restaurantTagId){
+        try {
+            RestaurantTag currentRestaurantTag = restaurantTagRepository.getById(restaurantTagId);
+            if(currentRestaurantTag.getId() == null) throw new RestaurantTagNotFoundException("restaurantTagId-" + restaurantTagId);
+            currentRestaurantTag.setName(newRestaurantTag.getName());
+            return restaurantTagRepository.save(currentRestaurantTag);
+        } catch (Exception e){
+            return null;
+        }
     }
-}
 
-
+    @Transactional
     public String deleteGivenRestaurantTag(Integer id) {
         try {
             RestaurantTag oldRestaurantTag = restaurantTagRepository.getById(id);
@@ -70,10 +64,4 @@ public RestaurantTag updateGivenRestaurantTag(RestaurantTag newRestaurantTag, In
         }
         return "That Restaurant Tag could not be deleted. Please try again.";
     }
-
-
-
-
-
-
 }
