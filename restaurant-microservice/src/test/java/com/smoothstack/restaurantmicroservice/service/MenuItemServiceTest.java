@@ -4,22 +4,26 @@ import com.smoothstack.common.models.*;
 import com.smoothstack.common.repositories.*;
 import com.smoothstack.common.services.CommonLibraryTestingService;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
 
+import com.smoothstack.restaurantmicroservice.exception.MenuItemNotFoundException;
+import com.smoothstack.restaurantmicroservice.exception.RestaurantNotFoundException;
 
 import com.smoothstack.restaurantmicroservice.data.MenuItemInformation;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
-@TestMethodOrder(OrderAnnotation.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@AutoConfigureTestDatabase
 public class MenuItemServiceTest {
 
     @Autowired
@@ -32,70 +36,150 @@ public class MenuItemServiceTest {
     CommonLibraryTestingService testingService;
 
     @BeforeEach
+//    @Disabled
     public void setUpTestEnvironment(){
         testingService.createTestData();
     }
 
 
     @Test
-    @Order(1)
-    public void returnsAllMenuItems(){
+//    @Disabled
+    public void returnsAllMenuItems() throws Exception {
         List<MenuItemInformation> testMenuItems = new ArrayList<MenuItemInformation>();
         List<MenuItem> dbMenuItems = menuItemRepository.findAll();
+
         for(MenuItem mI : dbMenuItems){
-//            System.out.println("menuItemId: " + mI.getId());
-            testMenuItems.add(menuItemService.getFrontendData(mI.getId()));
+            System.out.println("menuItemId: " + mI.getId());
+            testMenuItems.add(menuItemService.getMenuItemInformation(mI.getId()));
         }
         List<MenuItemInformation> serviceMenuItems = menuItemService.getAllMenuItems();
+
         assertEquals(testMenuItems, serviceMenuItems);
     }
 
     @Test
-    @Order(2)
+//    @Disabled
     public void returnsCorrectMenuItemDetails(){
         List<MenuItemInformation> testMenuItems = new ArrayList<MenuItemInformation>();
-        // - Find restaurantById
-        // - Unwrap Optional in order to pass into find menuItemsByRestaurant method
-        // - save returned menu item list to menuItemInformation
         Optional<Restaurant> dbRestaurantOptional = restaurantRepository.findById(1);
         Restaurant dbRestaurant = dbRestaurantOptional.get();
         List<MenuItem> dbMenuItems = menuItemRepository.findAllByRestaurants(dbRestaurant);
+
         for(MenuItem mI : dbMenuItems){
-            testMenuItems.add(menuItemService.getFrontendData(mI.getId()));
+            testMenuItems.add(menuItemService.getMenuItemInformation(mI.getId()));
         }
-        List<MenuItemInformation> serviceMenuItems = menuItemService.getMenuItemDetails(1);
+        List<MenuItemInformation> serviceMenuItems = menuItemService.getRestaurantMenu(1);
+
         assertEquals(testMenuItems, serviceMenuItems);
     }
 
     @Test
-    @Order(3)
+//    @Disabled
+    public void returnsCorrectMenuItemDetailsRestaurantNotFound(){
+        boolean notFoundExceptionThrown = false;
+
+        try {
+            menuItemService.getRestaurantMenu(0);
+        } catch(RestaurantNotFoundException restaurantNotFoundException){
+            notFoundExceptionThrown = true;
+        }
+
+        assertTrue(notFoundExceptionThrown);
+    }
+
+
+    @Test
+//    @Disabled
     public void returnsSavedMenuItem(){
+        Optional<Restaurant> dbRestaurant = restaurantRepository.findById(1);
+        Restaurant testRestaurant = dbRestaurant.get();
+
         MenuItem newMenuItem = new MenuItem();
+        newMenuItem.setRestaurants(testRestaurant);
         newMenuItem.setName("testItem");
         newMenuItem.setDescription("testDescription");
         newMenuItem.setPrice(2.50);
-        MenuItem savedMenuItem = menuItemService.createNewMenuItem(newMenuItem);
-        assertEquals(savedMenuItem, newMenuItem);
+        String confirmMessage = menuItemService.createNewMenuItem(newMenuItem);
+
+        assertEquals("Menu Item 'testItem' created successfully. Id:16", confirmMessage);
+    }
+
+
+    @Test
+//    @Disabled
+    public void returnsSavedMenuItemRestaurantNotFound(){
+        boolean notFoundExceptionThrown = false;
+        Optional<Restaurant> dbRestaurant = restaurantRepository.findById(1);
+        Restaurant testRestaurant = dbRestaurant.get();
+        testRestaurant.setId(0);
+
+        MenuItem newMenuItem = new MenuItem();
+        newMenuItem.setRestaurants(testRestaurant);
+        newMenuItem.setName("testItem");
+        newMenuItem.setDescription("testDescription");
+        newMenuItem.setPrice(2.50);
+
+        try {
+            menuItemService.createNewMenuItem(newMenuItem);
+        } catch(RestaurantNotFoundException restaurantNotFoundException){
+            notFoundExceptionThrown = true;
+        }
+
+        assertTrue(notFoundExceptionThrown);
     }
 
     @Test
-    @Order(4)
+//    @Disabled
     public void returnsUpdatedMenuItem(){
         Optional<MenuItem> dbMenuItem = menuItemRepository.findById(1);
         MenuItem testMenuItem = dbMenuItem.get();
+        String returnedMenuItem = menuItemService.updateGivenMenuItem(testMenuItem, 1);
+
         testMenuItem.setName("test menu item iii");
-        MenuItem returnedMenuItem = menuItemService.updateGivenMenuItem(testMenuItem, 1);
-        System.out.println("Checking updated menu item name is test menu item iii");
-        assertEquals("test menu item iii", returnedMenuItem.getName());
+
+        assertEquals("Menu Item has been updated successfully", returnedMenuItem);
     }
 
     @Test
-    @Order(5)
+//    @Disabled
+    public void returnsUpdatedMenuItemNotFound(){
+        boolean notFoundExceptionThrown = false;
+        Optional<MenuItem> dbMenuItem = menuItemRepository.findById(1);
+        MenuItem testMenuItem = dbMenuItem.get();
+
+        testMenuItem.setName("test menu item iii");
+
+        try {
+           menuItemService.updateGivenMenuItem(testMenuItem, 0);
+        } catch(MenuItemNotFoundException menuItemNotFoundException){
+            notFoundExceptionThrown = true;
+        }
+
+        assertTrue(notFoundExceptionThrown);
+    }
+
+    @Test
+//    @Disabled
     public void confirmsDeletedMenuItem(){
-        Optional<MenuItem> dbMenuItem = menuItemRepository.findById(15);
+        Optional<MenuItem> dbMenuItem = menuItemRepository.findById(1);
         MenuItem menuItem = dbMenuItem.get();
-        String deleteMessage = menuItemService.deleteGivenMenuItem(menuItem.getId());;
+        String deleteMessage = menuItemService.deleteGivenMenuItem(menuItem.getId());
+
         assertEquals(deleteMessage, "Menu item has been deleted successfully");
+    }
+
+    @Test
+//    @Disabled
+    public void confirmsDeletedMenuItemNotFound(){
+        boolean notFoundExceptionThrown = false;
+
+        try {
+            menuItemService.deleteGivenMenuItem(0);
+        } catch(MenuItemNotFoundException menuItemNotFoundException){
+            notFoundExceptionThrown = true;
+        }
+
+        assertTrue(notFoundExceptionThrown);
     }
 
     @AfterEach

@@ -1,10 +1,7 @@
 package com.smoothstack.restaurantmicroservice.data;
 
-import com.smoothstack.common.models.MenuItem;
-
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
 @Data

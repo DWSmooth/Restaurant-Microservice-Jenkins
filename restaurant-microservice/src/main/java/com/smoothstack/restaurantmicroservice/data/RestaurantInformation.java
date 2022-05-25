@@ -1,14 +1,9 @@
 package com.smoothstack.restaurantmicroservice.data;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import com.smoothstack.common.models.Restaurant;
-import com.smoothstack.common.models.MenuItem;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
 @Data

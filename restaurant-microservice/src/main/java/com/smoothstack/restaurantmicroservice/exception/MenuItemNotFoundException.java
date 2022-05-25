@@ -1,11 +1,12 @@
 package com.smoothstack.restaurantmicroservice.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+public class MenuItemNotFoundException extends RuntimeException{
+    private String message;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class MenuItemNotFoundException extends RuntimeException {
-    public MenuItemNotFoundException (String exception){
-        super(exception);
+    public MenuItemNotFoundException(String message){
+        super(message);
+        this.message = message;
     }
+
+    public MenuItemNotFoundException(){};
 }

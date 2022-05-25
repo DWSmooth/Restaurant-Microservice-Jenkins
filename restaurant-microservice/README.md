@@ -62,7 +62,7 @@ Restaurant Reviews - customer reviews for restaurants.
                         "id": 2,
                     ....
 
-###        /restaurants/{restaurantId} - Get restaurant by id
+###        /restaurant/{restaurantId} - Get restaurant by id
 
             will return:
                 {
@@ -81,7 +81,7 @@ Restaurant Reviews - customer reviews for restaurants.
                     ]
                 }
 
-###        /restaurants/{restaurantId}/menuItems - Get menu by restaurant id
+###        /restaurant/{restaurantId}/menuItems - Get menu by restaurant id
 
             will return:
                 [
@@ -92,11 +92,19 @@ Restaurant Reviews - customer reviews for restaurants.
                         "description": "fired rice with shrimp, choice of spicy or non spicy",
                         "price": 4.25,
                         "restaurant_name": null
+                    },
+                    {
+                        "itemId": 10,
+                        "restaurants_id": 5,
+                        "name": "to be deleted iiiiii",
+                        "description": "potatoe baked, with barbecue topping",
+                        "price": 5.5,
+                        "restaurant_name": "Taqueria I"
                     }
                 ]
 
 ## POST
-###        /restaurants - Create a restaurant
+###        /restaurant - Create a restaurant
             
             Post Data:
                 {
@@ -112,32 +120,16 @@ Restaurant Reviews - customer reviews for restaurants.
             ________________________________________________
 
             will return:
-                {
-                    "id": 3,
-                    "location": {
-                        "id": 3,
-                        "locationName": null,
-                        "address": null,
-                        "city": null,
-                        "state": null,
-                        "zipCode": null
-                    },
-                    "owner": {
-                        "id": 3,
-                        "userName": null,
-                        "password": null,
-                        "userRoles": null,
-                        "reviews": null,
-                        "savedCards": null,
-                        "savedLocations": null
-                    },
-                    "name": "Leos Barbecue",
-                    "menuItems": null,
-                    "restaurantTags": null
-                }
+                Success:
+                    Restaurant 'McDonalds 09' created successfully. Id:24
+
+                Updated:
+                    No location exists with that Id. Please try again.,
+                    No user exists with that Id. Please try again.
 
 
-###        /restaurants/menuItems - Create a menu item
+
+###        /restaurant/menuItem - Create a menu item
 
             Post Data:
                 {
@@ -152,23 +144,13 @@ Restaurant Reviews - customer reviews for restaurants.
             ________________________________________________
 
             will return:
-                {
-                    "id": 3,
-                    "restaurants": {
-                        "id": 2,
-                        "location": null,
-                        "owner": null,
-                        "name": null,
-                        "menuItems": null,
-                        "restaurantTags": null
-                    },
-                    "name": "Kung Pao Chicken",
-                    "description": "spicy chicken served over mixed vegaetables or fried rice",
-                    "price": 4.25,
-                    "discounts": null
-                }
+                Success:
+                    Menu Item 'to be deleted i' created successfully. Id:11
 
-###        /restaurants/restaurantTags - Create a restaurant tag
+                Exception:
+                    MenuItem with Id:0 does not exists. Please try again
+
+###        /restaurant/restaurantTag - Create a restaurant tag
             
 
             Post Data:
@@ -179,13 +161,14 @@ Restaurant Reviews - customer reviews for restaurants.
             ________________________________________________
             
             will return:
-                {
-                    "id": 4,
-                    "name": "deleteThisTag"
-                }
+                Success:
+                    RestaurantTag with name: 'deleteThisTag 1' already exists in restaurant tags with ID: 11.
+                
+                Exception:
+                    RestaurantTag with name: 'deleteThisTag 1' already exists in restaurant tags with ID: 11.
 
 ## PUT
-###        /restaurants/{restaurantId} - Update a restaurant
+###        /restaurant/{restaurantId} - Update a restaurant
             Put Data:
                 {
                     "location": {
@@ -200,11 +183,16 @@ Restaurant Reviews - customer reviews for restaurants.
             ________________________________________________
 
              will return:
+                Success:
+                    Restaurant has been updated successfully
 
-                currently errors out with infinite loop
+                Exception:
+                    RestaurantTag with Id:0 does not exists. Please try again,
+                    No location exists with that Id. Please try again.,
+                    No user exists with that Id. Please try again.
 
 
-###        /restaurants/menuItems/{menuItemId} - Update a menu item
+###        /restaurant/menuItem/{menuItemId} - Update a menu item
             
 
             Put Data:
@@ -220,24 +208,14 @@ Restaurant Reviews - customer reviews for restaurants.
             ________________________________________________
 
             will return:
-                {
-                    "id": 3,
-                    "restaurants": {
-                        "id": 1,
-                        "location": null,
-                        "owner": null,
-                        "name": null,
-                        "menuItems": null,
-                        "restaurantTags": null
-                    },
-                    "name": "Garlic Bread Sticks",
-                    "description": "side order of bread sticks",
-                    "price": 4.25,
-                    "discounts": []
-                }
+                Success:
+                    Menu Item has been updated successfully
+
+                Exception:
+                    MenuItem with Id:0 does not exists. Please try again
 
 
-###        /restaurants/restaurantTags/{restaurantTagId} - Update a restaurant tag
+###        /restaurant/restaurantTag/{restaurantTagId} - Update a restaurant tag
         
             Put Data:
                 {
@@ -248,42 +226,62 @@ Restaurant Reviews - customer reviews for restaurants.
             ________________________________________________
 
             will return:
-                {
-                    "id": 4,
-                    "name": "Barbecue"
-                }
+                Success:
+                    Restaurant Tag has been updated successfully
+                
+                Exception:
+                    RestaurantTag with Id:0 does not exists. Please try again,
+                    RestaurantTag with Id:8 already exists for this Restaurant.
 
-###         /restaurants/{restaurantId}/{restaurantTagId} - Add a restaurant tag to an existing restaurant
+
+###         /restaurant/{restaurantId}/restaurantTag/{restaurantTagId} - Add a restaurant tag to an existing restaurant
            
 
             Put Data:
                 ---
-                    No body data reuquired as we are passing the tag id through route params.
+                    No body data reuquired as we are passing the restaurantId and tagId through route params.
                 ---
             
             ________________________________________________
 
             will return:
-                currently errors out with infinite loop
+                Success:
+                    Restaurant Tag successfully added to restaurant
+
+                Exception:
+                    Restaurant with Id:0 does not exists. Please try again,
+                    RestaurantTag with Id:0 does not exists. Please try again,
+                    RestaurantTag with Id:8 already exists for this Restaurant
 
 
 
 
 
 ## DELETE
-###        /restaurants/{restaurantId} - Delete a restaurant
+###        /restaurant/{restaurantId} - Delete a restaurant
             
             will return:
-                Restaurant has been deleted successfully
+                Success:
+                    Restaurant has been deleted successfully
+
+                Exception:
+                    Restaurant with Id:0 does not exists. Please try again
 
 
-###        /restaurants/menuItems/{menuItemId} - Delete a menu item
+###        /restaurant/menuItem/{menuItemId} - Delete a menu item
             
             will return:
-                Menu item has been deleted successfully
+                Success:
+                    Menu item has been deleted successfully
 
+                Exception:
+                    MenuItem with Id:0 does not exists. Please try again
 
-###        /restaurants/restaurantTags/{restaurantTagId} - Delete a restaurant tag
+###        /restaurant/restaurantTag/{restaurantTagId} - Delete a restaurant tag
             will return:
-                Restaurant tag has been deleted successfully
+                Success:
+                    Restaurant tag has been deleted successfully
+
+                Exception:
+                    RestaurantTag with Id:0 does not exists. Please try again
 

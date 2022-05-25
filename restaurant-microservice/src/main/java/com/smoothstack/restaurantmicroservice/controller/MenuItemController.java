@@ -4,8 +4,11 @@ import java.util.List;
 
 import com.smoothstack.common.models.MenuItem;
 import com.smoothstack.common.models.Restaurant;
+import com.smoothstack.common.models.RestaurantTag;
 import com.smoothstack.restaurantmicroservice.data.MenuItemInformation;
 import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
+import com.smoothstack.restaurantmicroservice.exception.MenuItemNotFoundException;
+import com.smoothstack.restaurantmicroservice.exception.RestaurantNotFoundException;
 import com.smoothstack.restaurantmicroservice.service.MenuItemService;
 
 
@@ -22,29 +25,50 @@ public class MenuItemController {
 
 
     @GetMapping(value = "/restaurants/menuItems")
-    public ResponseEntity<List<MenuItemInformation>> getAllMenuItems(){
-        return ResponseEntity.status(HttpStatus.OK).body(menuItemService.getAllMenuItems());
+    public ResponseEntity<List<MenuItemInformation>> getAllMenuItems() throws Exception {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(menuItemService.getAllMenuItems());
+        } catch(Exception exception){
+            return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
     }
 
+    @GetMapping(value = "/restaurant/{restaurantId}/menuItems")
+    public ResponseEntity<List<MenuItemInformation>> getRestaurantMenu(@PathVariable Integer restaurantId) throws RestaurantNotFoundException {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(menuItemService.getRestaurantMenu(restaurantId));
+        } catch(RestaurantNotFoundException restaurantNotFoundException){
+            return new ResponseEntity(restaurantNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+        }
 
-    @GetMapping(value = "/restaurants/{restaurantId}/menuItems")
-    public ResponseEntity<List<MenuItemInformation>> getRestaurantMenu(@PathVariable Integer restaurantId){
-        return ResponseEntity.status(HttpStatus.OK).body(menuItemService.getMenuItemDetails(restaurantId));
     }
 
-    @PostMapping("/restaurants/menuItems")
-    public ResponseEntity<MenuItem> createMenuItem(@RequestBody MenuItem menuItem){
-        return ResponseEntity.status(HttpStatus.CREATED).body(menuItemService.createNewMenuItem(menuItem));
+    @PostMapping("/restaurant/menuItem")
+    public ResponseEntity<String> createMenuItem(@RequestBody MenuItem menuItem) throws RestaurantNotFoundException {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(menuItemService.createNewMenuItem(menuItem));
+        } catch(RestaurantNotFoundException restaurantNotFoundException){
+            return new ResponseEntity(restaurantNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @PutMapping(value = "restaurants/menuItems/{menuItemId}")
-    public ResponseEntity<MenuItem>updateRestaurant(@RequestBody MenuItem menuItem, @PathVariable Integer menuItemId){
-        return ResponseEntity.status(HttpStatus.OK).body(menuItemService.updateGivenMenuItem(menuItem, menuItemId));
+    @PutMapping(value = "restaurant/menuItem/{menuItemId}")
+    public ResponseEntity<String>updateMenuItem(@RequestBody MenuItem menuItem, @PathVariable Integer menuItemId) throws MenuItemNotFoundException{
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(menuItemService.updateGivenMenuItem(menuItem, menuItemId));
+        } catch ( MenuItemNotFoundException menuItemNotFoundException){
+            return new ResponseEntity(menuItemNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @DeleteMapping(value = "restaurants/menuItems/{menuItemId}")
-    public ResponseEntity<String>deleteRestaurant(@PathVariable Integer menuItemId){
-        return ResponseEntity.status(HttpStatus.OK).body(menuItemService.deleteGivenMenuItem(menuItemId));
+    @DeleteMapping(value = "restaurant/menuItem/{menuItemId}")
+    public ResponseEntity<String>deleteMenuItem(@PathVariable Integer menuItemId) throws MenuItemNotFoundException {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(menuItemService.deleteGivenMenuItem(menuItemId));
+        } catch ( MenuItemNotFoundException menuItemNotFoundException){
+            return new ResponseEntity(menuItemNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
 
