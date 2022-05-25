@@ -123,7 +123,7 @@ Restaurant Reviews - customer reviews for restaurants.
                 Success:
                     Restaurant 'McDonalds 09' created successfully. Id:24
 
-                Updated:
+                Exception:
                     No location exists with that Id. Please try again.,
                     No user exists with that Id. Please try again.
 
