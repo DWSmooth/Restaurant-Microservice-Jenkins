@@ -3,10 +3,8 @@ package com.smoothstack.restaurantmicroservice.controller;
 import java.util.List;
 
 import com.smoothstack.common.models.MenuItem;
-import com.smoothstack.common.models.Restaurant;
-import com.smoothstack.common.models.RestaurantTag;
+
 import com.smoothstack.restaurantmicroservice.data.MenuItemInformation;
-import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
 import com.smoothstack.restaurantmicroservice.exception.MenuItemNotFoundException;
 import com.smoothstack.restaurantmicroservice.exception.RestaurantNotFoundException;
 import com.smoothstack.restaurantmicroservice.service.MenuItemService;
