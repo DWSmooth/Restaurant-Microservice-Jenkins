@@ -1,0 +1,369 @@
+{
+	"info": {
+		"_postman_id": "e5a3373f-5250-4c7f-844a-6293c6316dcb",
+		"name": "RestaurantsMicroService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4802666"
+	},
+	"item": [
+		{
+			"name": "getAllRestaurants",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/restaurants",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurants"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllMenuItems",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/restaurants/menuItems",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurants",
+						"menuItems"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllTags",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/restaurants/restaurantTags",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurants",
+						"restaurantTags"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetRestaurantById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/restaurant/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetRestaurantMenu",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/restaurant/5/menuItems",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"5",
+						"menuItems"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateRestaurant",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"location\": {\n        \"id\": 3\n    },\n    \"owner\": {\n        \"id\": 3\n    },\n    \"name\": \"McDonalds 09\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/restaurant",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createMenuItem",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"restaurants\": {\n        \"id\": 1\n    },\n    \"name\": \"to be deleted i\",\n    \"description\": \"potatoe baked, with barbecue topping\",\n    \"price\": 5.50\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/restaurant/menuItem",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"menuItem"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createNewRestaurantTag",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"deleteThisTag 1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/restaurant/restaurantTag",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"restaurantTag"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "editRestaurant",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"location\": {\n        \"id\": 0\n    },\n    \"owner\": {\n        \"id\": 3\n    },\n    \"name\": \"Taqueria I\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/restaurant/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "editMenuItem",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"to be deleted iiiiii\",\n    \"description\": \"potatoe baked, with barbecue topping\",\n    \"price\": 5.50\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/restaurant/menuItem/10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"menuItem",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "editRestaurantTag",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Bar b q\"\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/restaurant/restaurantTag/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"restaurantTag",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addRestaurantTagToRestaurant",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/restaurant/5/restaurantTag/8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"5",
+						"restaurantTag",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteRestaurantById",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/restaurant/22",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"22"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteMenuItemById",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/restaurant/menuItem/11",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"menuItem",
+						"11"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteRestaurantTagById",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/restaurant/restaurantTag/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"restaurantTag",
+						"0"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
