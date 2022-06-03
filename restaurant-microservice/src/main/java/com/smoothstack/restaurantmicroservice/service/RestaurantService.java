@@ -38,6 +38,7 @@ public class RestaurantService {
 
     @Transactional
     public List<RestaurantInformation> getRestaurants() throws Exception {
+        System.out.println("Getting Restaurants");
         List<RestaurantInformation> restaurants = new ArrayList<RestaurantInformation>();
         if(restaurantRepository.findAll().isEmpty()){
             throw new Exception("No Restaurants to return");
