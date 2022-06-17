@@ -83,10 +83,10 @@ public class RestaurantService {
 
 
     @Transactional
-    public String updateGivenRestaurant(Restaurant updatedRestaurant, Integer restaurantId) throws LocationNotFoundException, RestaurantNotFoundException, UserNotFoundException {
+    public String updateGivenRestaurant(RestaurantInformation updatedRestaurant, Integer restaurantId) throws LocationNotFoundException, RestaurantNotFoundException, UserNotFoundException {
         Restaurant currentRestaurant = null;
-        int locationId = updatedRestaurant.getLocation().getId();
-        int userId = updatedRestaurant.getOwner().getId();
+        int locationId = updatedRestaurant.getLocation_id();
+        int ownerId = updatedRestaurant.getOwner_id();
 
         if(restaurantRepository.findById(restaurantId).isEmpty()){
             throw new RestaurantNotFoundException("Restaurant with Id:" + restaurantId + " does not exists. Please try again");
@@ -94,12 +94,12 @@ public class RestaurantService {
             if(locationRepository.findById(locationId).isEmpty()){
                 throw new LocationNotFoundException("No location exists with that Id. Please try again.");
             } else {
-                if(userRepository.findById(userId).isEmpty()){
+                if(userRepository.findById(ownerId).isEmpty()){
                     throw new UserNotFoundException("No user exists with that Id. Please try again.");
                 } else {
                     currentRestaurant = restaurantRepository.getById(restaurantId);
-                    currentRestaurant.setLocation(updatedRestaurant.getLocation());
-                    currentRestaurant.setOwner(updatedRestaurant.getOwner());
+                    currentRestaurant.setLocation(locationRepository.getById(locationId));
+                    currentRestaurant.setOwner(userRepository.getById(ownerId));
                     currentRestaurant.setName(updatedRestaurant.getName());
                     restaurantRepository.save(currentRestaurant);
                     return "Restaurant has been updated successfully";

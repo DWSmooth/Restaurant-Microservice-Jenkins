@@ -164,7 +164,8 @@ public class RestaurantServiceTest {
 //    @Disabled
     public void returnsUpdatedRestaurant(){
         Optional<Restaurant> dbRestaurant = restaurantRepository.findById(1);
-        Restaurant testRestaurant = dbRestaurant.get();
+        RestaurantInformation testRestaurant = new RestaurantInformation();
+        testRestaurant.setRestaurantId(dbRestaurant.get().getId());
         testRestaurant.setName("Oliver & Company");
         String returnedRestaurant = restaurantService.updateGivenRestaurant(testRestaurant, 1);
 
@@ -179,7 +180,8 @@ public class RestaurantServiceTest {
         boolean restaurantNotFound = false;
         boolean userNotFound = false;
         Optional<Restaurant> dbRestaurant = restaurantRepository.findById(1);
-        Restaurant testRestaurant = dbRestaurant.get();
+        RestaurantInformation testRestaurant = new RestaurantInformation();
+        testRestaurant.setRestaurantId(dbRestaurant.get().getId());
 
         Location testLocation = new Location();
         testLocation.setId(0);
@@ -187,7 +189,7 @@ public class RestaurantServiceTest {
         testLocation.setCity("Ames");
         testLocation.setState("Iowa");
         testLocation.setZipCode(50010);
-        testRestaurant.setLocation(testLocation);
+        testRestaurant.setLocation_id(locationRepository.save(testLocation).getId());
 
         try{
             restaurantService.updateGivenRestaurant(testRestaurant, 1);
@@ -212,7 +214,8 @@ public class RestaurantServiceTest {
         boolean restaurantNotFound = false;
         boolean userNotFound = false;
         Optional<Restaurant> dbRestaurant = restaurantRepository.findById(1);
-        Restaurant testRestaurant = dbRestaurant.get();
+        RestaurantInformation testRestaurant = new RestaurantInformation();
+        testRestaurant.setRestaurantId(dbRestaurant.get().getId());
 
         try{
             restaurantService.updateGivenRestaurant(testRestaurant, 0);
@@ -237,13 +240,14 @@ public class RestaurantServiceTest {
         boolean restaurantNotFound = false;
         boolean userNotFound = false;
         Optional<Restaurant> dbRestaurant = restaurantRepository.findById(1);
-        Restaurant testRestaurant = dbRestaurant.get();
+        RestaurantInformation testRestaurant = new RestaurantInformation();
+        testRestaurant.setRestaurantId(dbRestaurant.get().getId());
 
         User testUser = new User();
         testUser.setId(0);
         testUser.setUserName("abc");
         testUser.setPassword("123");
-        testRestaurant.setOwner(testUser);
+        testRestaurant.setOwner_id(userRepository.save(testUser).getId());
 
         try{
             restaurantService.updateGivenRestaurant(testRestaurant, 1);

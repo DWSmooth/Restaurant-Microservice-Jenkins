@@ -26,7 +26,7 @@ public class RestaurantInformation {
     // matches to owner_id
     private String owner_name;
 
-    // matches to restayrant Tags;
+    // matches to restaurant Tags;
     private List<String> restaurantTags;
 
 }
