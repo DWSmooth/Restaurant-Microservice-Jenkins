@@ -44,7 +44,7 @@ public class RestaurantController {
 
 
     @PostMapping("/restaurant")
-    public ResponseEntity<String>createRestaurant(@RequestBody Restaurant restaurant) throws LocationNotFoundException, UserNotFoundException {
+    public ResponseEntity<String>createRestaurant(@RequestBody RestaurantInformation restaurant) throws UserNotFoundException {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(restaurantService.createNewRestaurant(restaurant));
         } catch(LocationNotFoundException locationNotFoundException){

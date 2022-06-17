@@ -28,5 +28,4 @@ public class RestaurantInformation {
 
     // matches to restaurant Tags;
     private List<String> restaurantTags;
-
 }
