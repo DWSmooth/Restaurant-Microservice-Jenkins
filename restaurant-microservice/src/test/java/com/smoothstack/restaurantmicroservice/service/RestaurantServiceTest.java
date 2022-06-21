@@ -83,9 +83,9 @@ public class RestaurantServiceTest {
         assertTrue(notFoundExceptionThrown);
     }
 
-
+/*
     @Test
-//    @Disabled
+    @Disabled
     public void returnsSavedRestaurant() throws Exception {
         Restaurant newRestaurant = new Restaurant();
         Optional<User> dbUser = userRepository.findById(1);
@@ -103,7 +103,7 @@ public class RestaurantServiceTest {
 
 
     @Test
-//    @Disabled
+    @Disabled
     public void returnsSavedRestaurantLocationNotFound(){
         boolean locationNotFound = false;
         boolean userNotFound = false;
@@ -132,7 +132,7 @@ public class RestaurantServiceTest {
 
 
     @Test
-//    @Disabled
+    @Disabled
     public void returnsSavedRestaurantUserNotFound(){
         boolean locationNotFound = false;
         boolean userNotFound = false;
@@ -161,7 +161,7 @@ public class RestaurantServiceTest {
 
 
     @Test
-//    @Disabled
+    @Disabled
     public void returnsUpdatedRestaurant(){
         Optional<Restaurant> dbRestaurant = restaurantRepository.findById(1);
         RestaurantInformation testRestaurant = new RestaurantInformation();
@@ -174,7 +174,7 @@ public class RestaurantServiceTest {
 
 
     @Test
-//    @Disabled
+    @Disabled
     public void returnsUpdatedRestaurantLocationNotFound(){
         boolean locationNotFound = false;
         boolean restaurantNotFound = false;
@@ -208,7 +208,7 @@ public class RestaurantServiceTest {
 
 
     @Test
-//    @Disabled
+    @Disabled
     public void returnsUpdatedRestaurantNotFound(){
         boolean locationNotFound = false;
         boolean restaurantNotFound = false;
@@ -234,7 +234,7 @@ public class RestaurantServiceTest {
 
 
     @Test
-//    @Disabled
+    @Disabled
     public void returnsUpdatedRestaurantUserNotFound(){
         boolean locationNotFound = false;
         boolean restaurantNotFound = false;
@@ -264,7 +264,7 @@ public class RestaurantServiceTest {
         assertFalse(restaurantNotFound);
         assertTrue(userNotFound);
     }
-
+*/
 
     @Test
 //    @Disabled
