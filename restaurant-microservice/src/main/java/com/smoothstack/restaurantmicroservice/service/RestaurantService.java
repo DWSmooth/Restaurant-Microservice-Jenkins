@@ -70,7 +70,7 @@ public class RestaurantService {
         int ownerId = newRestaurant.getOwner_id();
 
         if(userRepository.findById(ownerId).isPresent()) {
-            Optional<List<Location>> locationList = locationRepository.findAllByLocationName(newRestaurant.getLocation_name());
+            List<Location> locationList = locationRepository.findAllByLocationName(newRestaurant.getLocation_name());
             
             // Create new Location Entity
             Location newLocation = new Location();
@@ -80,13 +80,10 @@ public class RestaurantService {
             newLocation.setState(newRestaurant.getState());
             newLocation.setZipCode(newRestaurant.getZip_code());
 
-            if(locationList.isEmpty()) {
-                // Create new Restaurant Entity
-                savedRestaurant = buildRestaurant(newRestaurant, newLocation);
-            }
-            else {
+            if (!locationList.isEmpty()) {
                 // Find if any items in the list match the provided address
-                for(Location l: locationList.get()) {
+                // If so, build the Restaurant entity
+                for(Location l: locationList) {
                     if (l.compareValues(newLocation)) {
                         savedRestaurant = buildRestaurant(newRestaurant, l);
                         break;
@@ -94,7 +91,13 @@ public class RestaurantService {
                 }
             }
 
-            savedRestaurant = restaurantRepository.saveAndFlush(savedRestaurant);
+            if (savedRestaurant == null) {
+                // If there is no saved RestaurantEntity, create a new Location, and build the Restaurant entity using it.
+                Location savedLocation = locationRepository.save(newLocation);
+                savedRestaurant = buildRestaurant(newRestaurant, savedLocation);
+            }
+
+            savedRestaurant = restaurantRepository.save(savedRestaurant);
             return "Restaurant '" + newRestaurant.getName() + "' created successfully. Id:" + savedRestaurant.getId() + "";
         }
         throw new UserNotFoundException("No user exists with Id " + ownerId +". Please try again.");
