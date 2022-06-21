@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 public class RestaurantController {
 
     @Autowired
@@ -45,7 +44,7 @@ public class RestaurantController {
 
 
     @PostMapping("/restaurant")
-    public ResponseEntity<String>createRestaurant(@RequestBody Restaurant restaurant) throws LocationNotFoundException, UserNotFoundException {
+    public ResponseEntity<String>createRestaurant(@RequestBody RestaurantInformation restaurant) throws UserNotFoundException {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(restaurantService.createNewRestaurant(restaurant));
         } catch(LocationNotFoundException locationNotFoundException){
@@ -57,7 +56,7 @@ public class RestaurantController {
 
 
     @PutMapping("/restaurant/{restaurantId}")
-    public ResponseEntity<String>updateRestaurant(@PathVariable Integer restaurantId, @RequestBody Restaurant restaurant) throws RestaurantNotFoundException, LocationNotFoundException, UserNotFoundException {
+    public ResponseEntity<String>updateRestaurant(@PathVariable Integer restaurantId, @RequestBody RestaurantInformation restaurant) throws RestaurantNotFoundException, LocationNotFoundException, UserNotFoundException {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(restaurantService.updateGivenRestaurant(restaurant, restaurantId));
         } catch(RestaurantNotFoundException restaurantNotFoundException){

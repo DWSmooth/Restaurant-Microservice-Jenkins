@@ -1,5 +1,6 @@
 package com.smoothstack.restaurantmicroservice.service;
 
+import com.smoothstack.common.models.Location;
 import com.smoothstack.common.models.Restaurant;
 import com.smoothstack.common.models.RestaurantTag;
 import com.smoothstack.common.repositories.LocationRepository;
@@ -64,29 +65,50 @@ public class RestaurantService {
 
 
     @Transactional
-    public String createNewRestaurant(Restaurant newRestaurant) throws LocationNotFoundException, UserNotFoundException {
+    public String createNewRestaurant(RestaurantInformation newRestaurant) throws UserNotFoundException {
         Restaurant savedRestaurant = null;
-        int locationId = newRestaurant.getLocation().getId();
-        int userId = newRestaurant.getOwner().getId();
+        int ownerId = newRestaurant.getOwner_id();
 
-        if(locationRepository.findById(locationId).isEmpty()) {
-            throw new LocationNotFoundException("No location exists with that Id. Please try again.");
-        } else {
-            if(userRepository.findById(userId).isEmpty()) {
-                throw new UserNotFoundException("No user exists with that Id. Please try again.");
-            } else {
-                savedRestaurant = restaurantRepository.saveAndFlush(newRestaurant);
-                return "Restaurant '" + newRestaurant.getName() + "' created successfully. Id:" + savedRestaurant.getId() + "";
+        if(userRepository.findById(ownerId).isPresent()) {
+            List<Location> locationList = locationRepository.findAllByLocationName(newRestaurant.getLocation_name());
+            
+            // Create new Location Entity
+            Location newLocation = new Location();
+            newLocation.setLocationName(newRestaurant.getLocation_name());
+            newLocation.setAddress(newRestaurant.getAddress());
+            newLocation.setCity(newRestaurant.getCity());
+            newLocation.setState(newRestaurant.getState());
+            newLocation.setZipCode(newRestaurant.getZip_code());
+
+            if (!locationList.isEmpty()) {
+                // Find if any items in the list match the provided address
+                // If so, build the Restaurant entity
+                for(Location l: locationList) {
+                    if (l.compareValues(newLocation)) {
+                        savedRestaurant = buildRestaurant(newRestaurant, l);
+                        break;
+                    }
+                }
             }
+
+            if (savedRestaurant == null) {
+                // If there is no saved RestaurantEntity, create a new Location, and build the Restaurant entity using it.
+                Location savedLocation = locationRepository.save(newLocation);
+                savedRestaurant = buildRestaurant(newRestaurant, savedLocation);
+            }
+
+            savedRestaurant = restaurantRepository.save(savedRestaurant);
+            return "Restaurant '" + newRestaurant.getName() + "' created successfully. Id:" + savedRestaurant.getId() + "";
         }
+        throw new UserNotFoundException("No user exists with Id " + ownerId +". Please try again.");
     }
 
 
     @Transactional
-    public String updateGivenRestaurant(Restaurant updatedRestaurant, Integer restaurantId) throws LocationNotFoundException, RestaurantNotFoundException, UserNotFoundException {
+    public String updateGivenRestaurant(RestaurantInformation updatedRestaurant, Integer restaurantId) throws LocationNotFoundException, RestaurantNotFoundException, UserNotFoundException {
         Restaurant currentRestaurant = null;
-        int locationId = updatedRestaurant.getLocation().getId();
-        int userId = updatedRestaurant.getOwner().getId();
+        int locationId = updatedRestaurant.getLocation_id();
+        int ownerId = updatedRestaurant.getOwner_id();
 
         if(restaurantRepository.findById(restaurantId).isEmpty()){
             throw new RestaurantNotFoundException("Restaurant with Id:" + restaurantId + " does not exists. Please try again");
@@ -94,12 +116,12 @@ public class RestaurantService {
             if(locationRepository.findById(locationId).isEmpty()){
                 throw new LocationNotFoundException("No location exists with that Id. Please try again.");
             } else {
-                if(userRepository.findById(userId).isEmpty()){
+                if(userRepository.findById(ownerId).isEmpty()){
                     throw new UserNotFoundException("No user exists with that Id. Please try again.");
                 } else {
                     currentRestaurant = restaurantRepository.getById(restaurantId);
-                    currentRestaurant.setLocation(updatedRestaurant.getLocation());
-                    currentRestaurant.setOwner(updatedRestaurant.getOwner());
+                    currentRestaurant.setLocation(locationRepository.getById(locationId));
+                    currentRestaurant.setOwner(userRepository.getById(ownerId));
                     currentRestaurant.setName(updatedRestaurant.getName());
                     restaurantRepository.save(currentRestaurant);
                     return "Restaurant has been updated successfully";
@@ -177,5 +199,18 @@ public class RestaurantService {
             );
         }
         return restaurantInformation;
+    }
+
+    @Transactional
+    public Restaurant buildRestaurant(RestaurantInformation information, Location location) {
+        Restaurant createdRestaurant = new Restaurant();
+        
+        //TODO: Do proper error throwing if Id, name, etc are not provided
+        createdRestaurant.setOwner(userRepository.getById(information.getOwner_id()));
+        createdRestaurant.setName(information.getName());
+        createdRestaurant.setLocation(location);
+        //TODO: Set Tags
+
+        return createdRestaurant;
     }
 }
