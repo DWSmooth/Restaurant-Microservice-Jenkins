@@ -159,6 +159,26 @@ public class MenuItemServiceTest {
     }
 
     @Test
+    public void enableMenuItemTest() {
+        // TODO
+    }
+
+    @Test
+    public void enableAlreadyEnabledMenuItemTest() {
+        // TODO
+    }
+
+    @Test
+    public void disableMenuItemTest() {
+        // TODO
+    }
+
+    @Test
+    public void disableAlreadyDisabledMenuItemTest() {
+        // TODO
+    }
+
+    @Test
 //    @Disabled
     public void confirmsDeletedMenuItem(){
         Optional<MenuItem> dbMenuItem = menuItemRepository.findById(1);

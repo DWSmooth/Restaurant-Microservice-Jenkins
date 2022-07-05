@@ -4,11 +4,7 @@ import java.util.List;
 
 import com.smoothstack.common.models.Restaurant;
 import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
-import com.smoothstack.restaurantmicroservice.exception.LocationNotFoundException;
-import com.smoothstack.restaurantmicroservice.exception.RestaurantNotFoundException;
-import com.smoothstack.restaurantmicroservice.exception.RestaurantTagNotFoundException;
-import com.smoothstack.restaurantmicroservice.exception.RestaurantTagAlreadyExistsException;
-import com.smoothstack.restaurantmicroservice.exception.UserNotFoundException;
+import com.smoothstack.restaurantmicroservice.exception.*;
 import com.smoothstack.restaurantmicroservice.service.RestaurantService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +78,53 @@ public class RestaurantController {
         }
     }
 
+    @PutMapping("/restaurant/{restaurantId}/restaurantTag/{restaurantTagId}/enable")
+    public ResponseEntity<String>enableRestaurantTag(@PathVariable Integer restaurantId, @PathVariable Integer restaurantTagId) throws RestaurantNotFoundException, RestaurantTagNotFoundException, RestaurantTagAlreadyExistsException {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(restaurantService.enableGivenRestaurantTags(restaurantId, restaurantTagId));
+        } catch(RestaurantNotFoundException restaurantNotFoundException){
+            return new ResponseEntity(restaurantNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch(RestaurantTagNotFoundException restaurantTagNotFoundException){
+            return new ResponseEntity(restaurantTagNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+        }  catch(RestaurantTagAlreadyExistsException restaurantTagAlreadyExistsException){
+            return new ResponseEntity(restaurantTagAlreadyExistsException.getMessage(), HttpStatus.CONFLICT);
+        }
+    }
+
+    @PutMapping("/restaurant/{restaurantId}/restaurantTag/{restaurantTagId}/disable")
+    public ResponseEntity<String>disableRestaurantTag(@PathVariable Integer restaurantId, @PathVariable Integer restaurantTagId) throws RestaurantNotFoundException, RestaurantTagNotFoundException, RestaurantTagAlreadyExistsException {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(restaurantService.disableGivenRestaurantTags(restaurantId, restaurantTagId));
+        } catch(RestaurantNotFoundException restaurantNotFoundException){
+            return new ResponseEntity(restaurantNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch(RestaurantTagNotFoundException restaurantTagNotFoundException){
+            return new ResponseEntity(restaurantTagNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+        }  catch(RestaurantTagAlreadyExistsException restaurantTagAlreadyExistsException){
+            return new ResponseEntity(restaurantTagAlreadyExistsException.getMessage(), HttpStatus.CONFLICT);
+        }
+    }
+
+    @PutMapping("/restaurant/enable/{restaurantId}")
+    public ResponseEntity<String>enableRestaurant(@PathVariable Integer restaurantId) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(restaurantService.enableRestaurant(restaurantId));
+        } catch(RestaurantNotFoundException restaurantNotFoundException){
+            return new ResponseEntity(restaurantNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch(RestaurantAlreadyEnabledException restaurantAlreadyEnabledException){
+            return new ResponseEntity(restaurantAlreadyEnabledException.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/restaurant/disable/{restaurantId}/")
+    public ResponseEntity<String>disableRestaurant(@PathVariable Integer restaurantId) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(restaurantService.disableRestaurant(restaurantId));
+        } catch(RestaurantNotFoundException restaurantNotFoundException){
+            return new ResponseEntity(restaurantNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch(RestaurantAlreadyDisabledException restaurantAlreadyDisabledException){
+            return new ResponseEntity(restaurantAlreadyDisabledException.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @DeleteMapping(value = "/restaurant/{restaurantId}")
     public ResponseEntity<String>deleteRestaurant(@PathVariable Integer restaurantId) throws RestaurantNotFoundException{

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RestaurantTagService {
@@ -65,6 +66,35 @@ public class RestaurantTagService {
         }
     }
 
+    @Transactional
+    public String enableGivenRestaurantTag(Integer restaurantTagId) throws RestaurantTagNotFoundException {
+        Optional<RestaurantTag> restaurantTagOptional = restaurantTagRepository.findById(restaurantTagId);
+        if(restaurantTagOptional.isEmpty()){
+            throw new RestaurantTagNotFoundException("RestaurantTag with Id:" + restaurantTagId + " does not exists. Please try again");
+        } else if(restaurantTagOptional.get().isEnabled()) {
+            throw new RestaurantTagNotFoundException("RestaurantTag with Id:" + restaurantTagId + " is already enabled. Please try again");
+        } else {
+            RestaurantTag restaurantTag = restaurantTagOptional.get();
+            restaurantTag.setEnabled(true);
+            restaurantTagRepository.saveAndFlush(restaurantTag);
+            return "Restaurant Tag has been enabled successfully";
+        }
+    }
+
+    @Transactional
+    public String disableGivenRestaurantTag(Integer restaurantTagId) throws RestaurantTagNotFoundException {
+        Optional<RestaurantTag> restaurantTagOptional = restaurantTagRepository.findById(restaurantTagId);
+        if(restaurantTagOptional.isEmpty()){
+            throw new RestaurantTagNotFoundException("RestaurantTag with Id:" + restaurantTagId + " does not exists. Please try again");
+        } else if(!restaurantTagOptional.get().isEnabled()) {
+            throw new RestaurantTagNotFoundException("RestaurantTag with Id:" + restaurantTagId + " is already disabled. Please try again");
+        } else {
+            RestaurantTag restaurantTag = restaurantTagOptional.get();
+            restaurantTag.setEnabled(false);
+            restaurantTagRepository.saveAndFlush(restaurantTag);
+            return "Restaurant Tag has been disabled successfully";
+        }
+    }
 
     @Transactional
     public String deleteGivenRestaurantTag(Integer restaurantTagId) throws RestaurantTagNotFoundException {
