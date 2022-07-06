@@ -113,4 +113,37 @@ public class MenuItemService {
         menuItemInformation.setRestaurant_name(menuItem1.getRestaurants().getName());
         return menuItemInformation;
     }
+
+
+    @Transactional
+    public String enableGivenMenuItem(Integer menuItemId) {
+        Optional<MenuItem> menuItemOptional = menuItemRepository.findById(menuItemId);
+        if (menuItemOptional.isEmpty()) {
+            throw new MenuItemNotFoundException("MenuItem with Id:" + menuItemId + " does not exists. Please try again");
+
+        } else if (menuItemOptional.get().isEnabled()) {
+            throw new MenuItemNotFoundException("MenuItem with Id:" + menuItemId + " is already enabled. Please try again");
+        } else {
+            MenuItem menuItem = menuItemOptional.get();
+            menuItem.setEnabled(true);
+            menuItemRepository.saveAndFlush(menuItem);
+            return "Menu item has been enabled successfully";
+        }
+    }
+
+    @Transactional
+    public String disableGivenMenuItem(Integer menuItemId) {
+        Optional<MenuItem> menuItemOptional = menuItemRepository.findById(menuItemId);
+        if (menuItemOptional.isEmpty()) {
+            throw new MenuItemNotFoundException("MenuItem with Id:" + menuItemId + " does not exists. Please try again");
+
+        } else if (!menuItemOptional.get().isEnabled()) {
+            throw new MenuItemNotFoundException("MenuItem with Id:" + menuItemId + " is already disabled. Please try again");
+        } else {
+            MenuItem menuItem = menuItemOptional.get();
+            menuItem.setEnabled(false);
+            menuItemRepository.saveAndFlush(menuItem);
+            return "Menu item has been disabled successfully";
+        }
+    }
 }

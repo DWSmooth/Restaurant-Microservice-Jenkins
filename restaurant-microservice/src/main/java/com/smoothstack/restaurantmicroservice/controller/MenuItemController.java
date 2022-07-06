@@ -60,6 +60,24 @@ public class MenuItemController {
         }
     }
 
+    @PutMapping(value = "restaurant/menuItem/{menuItemId}/enable")
+    public ResponseEntity<String>enableMenuItem(@PathVariable Integer menuItemId) throws MenuItemNotFoundException{
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(menuItemService.enableGivenMenuItem(menuItemId));
+        } catch ( MenuItemNotFoundException menuItemNotFoundException){
+            return new ResponseEntity(menuItemNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(value = "restaurant/menuItem/{menuItemId}/disable")
+    public ResponseEntity<String>disableMenuItem(@PathVariable Integer menuItemId) throws MenuItemNotFoundException{
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(menuItemService.disableGivenMenuItem(menuItemId));
+        } catch ( MenuItemNotFoundException menuItemNotFoundException){
+            return new ResponseEntity(menuItemNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @DeleteMapping(value = "restaurant/menuItem/{menuItemId}")
     public ResponseEntity<String>deleteMenuItem(@PathVariable Integer menuItemId) throws MenuItemNotFoundException {
         try {

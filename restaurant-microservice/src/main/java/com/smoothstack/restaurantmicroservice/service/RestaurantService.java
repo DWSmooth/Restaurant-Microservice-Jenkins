@@ -9,11 +9,7 @@ import com.smoothstack.common.repositories.RestaurantTagRepository;
 import com.smoothstack.common.repositories.UserRepository;
 
 import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
-import com.smoothstack.restaurantmicroservice.exception.LocationNotFoundException;
-import com.smoothstack.restaurantmicroservice.exception.RestaurantNotFoundException;
-import com.smoothstack.restaurantmicroservice.exception.RestaurantTagNotFoundException;
-import com.smoothstack.restaurantmicroservice.exception.RestaurantTagAlreadyExistsException;
-import com.smoothstack.restaurantmicroservice.exception.UserNotFoundException;
+import com.smoothstack.restaurantmicroservice.exception.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -213,4 +209,100 @@ public class RestaurantService {
 
         return createdRestaurant;
     }
+
+    @Transactional
+    public String enableGivenRestaurantTags(Integer restaurantId, Integer restaurantTagId) {
+        Restaurant currentRestaurant = null;
+        RestaurantTag currentRestaurantTag = null;
+
+        if(restaurantRepository.findById(restaurantId).isEmpty()){
+            throw new RestaurantNotFoundException("Restaurant with Id:" + restaurantId + " does not exists. Please try again");
+        } else {
+            if(restaurantTagRepository.findById(restaurantTagId).isEmpty()){
+                throw new RestaurantTagNotFoundException("RestaurantTag with Id:" + restaurantTagId + " does not exists. Please try again");
+            } else {
+                currentRestaurant = restaurantRepository.getById(restaurantId);
+                currentRestaurantTag = restaurantTagRepository.getById(restaurantTagId);
+                List<RestaurantTag> dbRestaurantTags = currentRestaurant.getRestaurantTags();
+
+                for(RestaurantTag restaurantTag: dbRestaurantTags){
+                    if (restaurantTag.getId() == restaurantTagId && restaurantTag.isEnabled()) {
+                        throw new RestaurantTagAlreadyExistsException("RestaurantTag with Id:" + restaurantTagId + " is already enabled for this Restaurant.");
+                    } else if (restaurantTag.getId() == restaurantTagId && !restaurantTag.isEnabled()) {
+                        restaurantTag.setEnabled(true);
+                    }
+                }
+
+                dbRestaurantTags.add(currentRestaurantTag);
+                currentRestaurant.setRestaurantTags(dbRestaurantTags);
+                restaurantRepository.save(currentRestaurant);
+                return "Restaurant Tag successfully enabled";
+            }
+        }
+    }
+
+    @Transactional
+    public String disableGivenRestaurantTags(Integer restaurantId, Integer restaurantTagId) {
+        Restaurant currentRestaurant = null;
+        RestaurantTag currentRestaurantTag = null;
+
+        if(restaurantRepository.findById(restaurantId).isEmpty()){
+            throw new RestaurantNotFoundException("Restaurant with Id:" + restaurantId + " does not exists. Please try again");
+        } else {
+            if(restaurantTagRepository.findById(restaurantTagId).isEmpty()){
+                throw new RestaurantTagNotFoundException("RestaurantTag with Id:" + restaurantTagId + " does not exists. Please try again");
+            } else {
+                currentRestaurant = restaurantRepository.getById(restaurantId);
+                currentRestaurantTag = restaurantTagRepository.getById(restaurantTagId);
+                List<RestaurantTag> dbRestaurantTags = currentRestaurant.getRestaurantTags();
+
+                for(RestaurantTag restaurantTag: dbRestaurantTags){
+                    if (restaurantTag.getId() == restaurantTagId && !restaurantTag.isEnabled()) {
+                        throw new RestaurantTagAlreadyExistsException("RestaurantTag with Id:" + restaurantTagId + " is already disabled for this Restaurant.");
+                    } else if (restaurantTag.getId() == restaurantTagId && restaurantTag.isEnabled()) {
+                        restaurantTag.setEnabled(false);
+                    }
+                }
+
+                dbRestaurantTags.add(currentRestaurantTag);
+                currentRestaurant.setRestaurantTags(dbRestaurantTags);
+                restaurantRepository.save(currentRestaurant);
+                return "Restaurant Tag successfully disabled";
+            }
+        }
+    }
+
+    @Transactional
+    public String enableRestaurant(Integer restaurantId) {
+        Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurantId);
+        if(restaurantOptional.isEmpty()){
+            throw new RestaurantNotFoundException("Restaurant with Id:" + restaurantId + " does not exists");
+        } else if (restaurantOptional.get().isEnabled()) {
+            throw new RestaurantAlreadyDisabledException("Restaurant with Id:" + restaurantId + " is already enabled");
+
+        } else {
+            Restaurant restaurant = restaurantRepository.getById(restaurantId);
+            restaurant.setEnabled(true);
+            restaurantRepository.saveAndFlush(restaurant);
+            return "Restaurant has been enabled successfully";
+        }
+    }
+
+    @Transactional
+    public String disableRestaurant(Integer restaurantId) {
+        Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurantId);
+        if(restaurantOptional.isEmpty()){
+            throw new RestaurantNotFoundException("Restaurant with Id:" + restaurantId + " does not exists");
+        } else if (!restaurantOptional.get().isEnabled()) {
+            throw new RestaurantAlreadyDisabledException("Restaurant with Id:" + restaurantId + " is already disabled");
+
+        } else {
+            Restaurant restaurant = restaurantRepository.getById(restaurantId);
+            restaurant.setEnabled(false);
+            restaurantRepository.saveAndFlush(restaurant);
+            return "Restaurant has been disabled successfully";
+        }
+    }
+
+
 }
