@@ -15,6 +15,7 @@ public class RestaurantInformation {
     private Integer location_id;
     private Integer owner_id;
     private String name;
+    private Boolean enabled;
 
     // matches to location_id
     private String location_name;
