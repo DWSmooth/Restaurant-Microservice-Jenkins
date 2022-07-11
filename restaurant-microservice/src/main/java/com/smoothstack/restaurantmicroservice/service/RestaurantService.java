@@ -1,24 +1,29 @@
 package com.smoothstack.restaurantmicroservice.service;
 
+import com.google.common.base.Strings;
 import com.smoothstack.common.models.Location;
 import com.smoothstack.common.models.Restaurant;
 import com.smoothstack.common.models.RestaurantTag;
-import com.smoothstack.common.repositories.LocationRepository;
-import com.smoothstack.common.repositories.RestaurantRepository;
-import com.smoothstack.common.repositories.RestaurantTagRepository;
-import com.smoothstack.common.repositories.UserRepository;
+import com.smoothstack.common.repositories.*;
 
-import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
+import com.smoothstack.restaurantmicroservice.data.*;
 import com.smoothstack.restaurantmicroservice.exception.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.util.Objects.isNull;
 
 @Service
 public class RestaurantService {
@@ -29,6 +34,10 @@ public class RestaurantService {
     RestaurantRepository restaurantRepository;
     @Autowired
     RestaurantTagRepository restaurantTagRepository;
+
+    @Autowired
+    ReviewRepository reviewRepository;
+
     @Autowired
     UserRepository userRepository;
 
@@ -306,4 +315,130 @@ public class RestaurantService {
     }
 
 
+    public List<RestaurantInformation> findRestaurants(RestaurantsParams restaurantsParams) throws Exception {
+        // TODO
+        // implement geolocation for min/max dist and location
+
+        System.out.println(restaurantsParams);
+
+        Boolean hasTags = !Strings.isNullOrEmpty(restaurantsParams.getTags());
+
+        List<RestaurantInformation> restaurantInformations;
+
+        Specification<Restaurant> specification = getFilteredRestaurants(restaurantsParams);
+
+        if(hasTags) {
+            restaurantInformations = restaurantRepository.findAll(specification)
+                    .stream()
+                    .map(r -> getRestaurantInformation(r.getId()))
+                    .filter(r -> r.getRestaurantTags().containsAll(Arrays.asList(restaurantsParams.getTags().split(","))))
+                    .collect(Collectors.toList());
+        } else {
+            restaurantInformations = restaurantRepository.findAll(specification)
+                    .stream()
+                    .map(r -> getRestaurantInformation(r.getId()))
+                    .collect(Collectors.toList());
+        }
+
+        return restaurantInformations;
+    }
+
+    public static Specification<Restaurant> getFilteredRestaurants(RestaurantsParams params) {
+
+        Boolean hasLocation = !Strings.isNullOrEmpty(params.getLocation());
+        Boolean hasQuery = !Strings.isNullOrEmpty(params.getQuery());
+        Boolean hasSort = !Strings.isNullOrEmpty(params.getSort());
+        Boolean hasMinRating = !isNull(params.getMin_rating());
+        Boolean hasMaxRating = !isNull(params.getMax_rating());
+        Boolean hasMinDist = !isNull(params.getMin_dist());
+        Boolean hasMaxDist = !isNull(params.getMax_dist());
+        Boolean hasTags = !Strings.isNullOrEmpty(params.getTags());
+
+        return (root, criteriaQuery, criteriaBuilder) -> {
+
+            List<Predicate> predicates = new ArrayList<>();
+
+            if(hasLocation) {
+                predicates.add(
+                        criteriaBuilder.like(criteriaBuilder.lower(root.get("location").get("locationName")), '%' + params.getLocation().toLowerCase() + '%')
+                );
+            }
+
+            if(hasQuery) {
+
+                // empty list of predicates that will be put into one big or predicate
+                // this allows all words to come up through search
+                List<Predicate> qs = new ArrayList<>();
+                for(String q: params.getQuery().split(" ")) {
+                    qs.add(criteriaBuilder.or(
+                            criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), '%' + q.toLowerCase() + '%')
+                    ));
+                }
+                predicates.add(criteriaBuilder.or(qs.toArray(new Predicate[qs.size()])));
+
+            }
+
+            if(hasSort) {
+                // Will only sort by ratings for now, however ratings have not been implemented
+                if(params.getSort().equals("ratings.a")) {
+
+                    if(root.get("reviews").isNull().equals(false)) {
+                        criteriaQuery.orderBy(criteriaBuilder.asc(criteriaBuilder.avg(root.get("reviews").get("rating"))));
+                    }
+                } else if(params.getSort().equals("ratings.d")) {
+
+                    if(root.get("reviews").isNull().equals(false)) {
+                        criteriaQuery.orderBy(criteriaBuilder.desc(criteriaBuilder.avg(root.get("reviews").get("rating"))));
+                    }
+
+                } else if (params.getSort().equals("distance.a")) {
+                    // TODO
+                    // implement geolocation
+
+                } else if (params.getSort().equals("distance.d")) {
+                    // TODO
+                    // implement geolocation
+                } else {
+                    throw new InvalidSearchException(String.format("Sort method '%s' is not valid", params.getSort()));
+                }
+            }
+
+            if(hasMinRating && hasMaxRating) {
+                if(root.get("reviews").isNull().equals(false)) {
+                    predicates.add(criteriaBuilder.ge(criteriaBuilder.avg(root.get("reviews").get("rating")), params.getMin_rating()));
+                    predicates.add(criteriaBuilder.le(criteriaBuilder.avg(root.get("reviews").get("rating")), params.getMax_rating()));
+                }
+            }
+
+            if(hasMinRating && !hasMaxRating) {
+                if(root.get("reviews").isNull().equals(false)) {
+                    predicates.add(criteriaBuilder.ge(criteriaBuilder.avg(root.get("reviews").get("rating")), params.getMin_rating()));
+                }
+            }
+
+            if(!hasMinRating && hasMaxRating) {
+                if(root.get("reviews").isNull().equals(false)) {
+                    predicates.add(criteriaBuilder.le(criteriaBuilder.avg(root.get("reviews").get("rating")), params.getMax_rating()));
+                }
+            }
+
+            if(hasMinDist) {
+                // TODO
+                // implement geolocation so this can be applied
+            }
+
+            if(hasMaxDist) {
+                // TODO
+                // implement geolocation so this can be applied
+            }
+
+            if(hasTags) {
+                /*predicates.add(
+                        root.get("restaurantTags").in(Arrays.asList(params.getTags().split(",")))
+                );*/
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
 }
