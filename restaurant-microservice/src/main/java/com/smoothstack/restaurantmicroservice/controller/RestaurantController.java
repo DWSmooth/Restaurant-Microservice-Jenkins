@@ -2,8 +2,10 @@ package com.smoothstack.restaurantmicroservice.controller;
 
 import java.util.List;
 
+import com.smoothstack.common.models.MenuItem;
 import com.smoothstack.common.models.Restaurant;
 import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
+import com.smoothstack.restaurantmicroservice.data.RestaurantsParams;
 import com.smoothstack.restaurantmicroservice.exception.*;
 import com.smoothstack.restaurantmicroservice.service.RestaurantService;
 
@@ -78,7 +80,7 @@ public class RestaurantController {
         }
     }
 
-    @PutMapping("/restaurant/{restaurantId}/restaurantTag/{restaurantTagId}/enable")
+    @PutMapping(value = "/restaurant/enable/{restaurantId}/restaurantTag/{restaurantTagId}")
     public ResponseEntity<String>enableRestaurantTag(@PathVariable Integer restaurantId, @PathVariable Integer restaurantTagId) throws RestaurantNotFoundException, RestaurantTagNotFoundException, RestaurantTagAlreadyExistsException {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(restaurantService.enableGivenRestaurantTags(restaurantId, restaurantTagId));
@@ -91,7 +93,7 @@ public class RestaurantController {
         }
     }
 
-    @PutMapping("/restaurant/{restaurantId}/restaurantTag/{restaurantTagId}/disable")
+    @PutMapping("/restaurant/disable/{restaurantId}/restaurantTag/{restaurantTagId}")
     public ResponseEntity<String>disableRestaurantTag(@PathVariable Integer restaurantId, @PathVariable Integer restaurantTagId) throws RestaurantNotFoundException, RestaurantTagNotFoundException, RestaurantTagAlreadyExistsException {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(restaurantService.disableGivenRestaurantTags(restaurantId, restaurantTagId));
@@ -134,4 +136,16 @@ public class RestaurantController {
             return new ResponseEntity(restaurantNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(value = "/restaurant/search")
+    public ResponseEntity<List<RestaurantInformation>> searchRestaurantsMenuItems(@RequestBody RestaurantsParams restaurantsSearch) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(restaurantService.findRestaurants(restaurantsSearch));
+        } catch (InvalidSearchException invalidSearchException) {
+            return new ResponseEntity(invalidSearchException.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

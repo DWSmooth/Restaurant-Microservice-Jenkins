@@ -48,7 +48,7 @@ public class RestaurantTagController {
 
     }
 
-    @PutMapping(value = "restaurant/restaurantTag/{restaurantTagId/enable}")
+    @PutMapping(value = "restaurant/enable/restaurantTag/{restaurantTagId}")
     public ResponseEntity<String>enableRestaurantTag(@PathVariable Integer restaurantTagId) throws RestaurantNotFoundException, RestaurantTagNotFoundException, RestaurantTagAlreadyExistsException {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(restaurantTagService.enableGivenRestaurantTag(restaurantTagId));
@@ -59,7 +59,7 @@ public class RestaurantTagController {
         }
     }
 
-    @PutMapping(value = "restaurant/restaurantTag/{restaurantTagId}/disable")
+    @PutMapping(value = "restaurant/disable/restaurantTag/{restaurantTagId}")
     public ResponseEntity<String>disableRestaurantTag(@PathVariable Integer restaurantTagId) throws RestaurantNotFoundException, RestaurantTagNotFoundException, RestaurantTagAlreadyExistsException {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(restaurantTagService.disableGivenRestaurantTag(restaurantTagId));

@@ -5,6 +5,10 @@ import java.util.List;
 import com.smoothstack.common.models.MenuItem;
 
 import com.smoothstack.restaurantmicroservice.data.MenuItemInformation;
+import com.smoothstack.restaurantmicroservice.data.MenuItemParams;
+import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
+import com.smoothstack.restaurantmicroservice.data.RestaurantsParams;
+import com.smoothstack.restaurantmicroservice.exception.InvalidSearchException;
 import com.smoothstack.restaurantmicroservice.exception.MenuItemNotFoundException;
 import com.smoothstack.restaurantmicroservice.exception.RestaurantNotFoundException;
 import com.smoothstack.restaurantmicroservice.service.MenuItemService;
@@ -84,6 +88,17 @@ public class MenuItemController {
             return ResponseEntity.status(HttpStatus.OK).body(menuItemService.deleteGivenMenuItem(menuItemId));
         } catch ( MenuItemNotFoundException menuItemNotFoundException){
             return new ResponseEntity(menuItemNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "/restaurant/{restaurantId}/menuItems/search")
+    public ResponseEntity<List<MenuItemInformation>> searchRestaurantsMenuItems(@PathVariable Integer restaurantId, @RequestBody MenuItemParams menuItemsSearch) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(menuItemService.findMenuItems(restaurantId, menuItemsSearch));
+        } catch (InvalidSearchException invalidSearchException) {
+            return new ResponseEntity(invalidSearchException.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
