@@ -185,6 +185,7 @@ public class RestaurantService {
 
         restaurantInformation.setRestaurantId(restaurant1.getId());
         restaurantInformation.setName(restaurant1.getName());
+        restaurantInformation.setEnabled(restaurant1.isEnabled());
         // set restaurant owner information
         restaurantInformation.setOwner_id(restaurant1.getOwner().getId());
         restaurantInformation.setOwner_name(restaurant1.getOwner().getUserName());

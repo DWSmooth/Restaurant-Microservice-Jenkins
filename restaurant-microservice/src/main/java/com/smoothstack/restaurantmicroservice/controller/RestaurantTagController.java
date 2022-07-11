@@ -48,7 +48,7 @@ public class RestaurantTagController {
 
     }
 
-    @PutMapping(value = "restaurant/enable/restaurantTag/{restaurantTagId}")
+    @PutMapping(value = "restaurant/restaurantTag/{restaurantTagId}/enable")
     public ResponseEntity<String>enableRestaurantTag(@PathVariable Integer restaurantTagId) throws RestaurantNotFoundException, RestaurantTagNotFoundException, RestaurantTagAlreadyExistsException {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(restaurantTagService.enableGivenRestaurantTag(restaurantTagId));

@@ -117,7 +117,7 @@ public class RestaurantController {
         }
     }
 
-    @PutMapping("/restaurant/disable/{restaurantId}/")
+    @PutMapping("/restaurant/disable/{restaurantId}")
     public ResponseEntity<String>disableRestaurant(@PathVariable Integer restaurantId) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(restaurantService.disableRestaurant(restaurantId));
