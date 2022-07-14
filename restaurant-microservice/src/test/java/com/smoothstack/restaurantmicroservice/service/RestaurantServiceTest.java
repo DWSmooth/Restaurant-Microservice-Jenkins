@@ -1,5 +1,6 @@
 package com.smoothstack.restaurantmicroservice.service;
 
+import com.smoothstack.common.exceptions.*;
 import com.smoothstack.common.models.*;
 import com.smoothstack.common.repositories.*;
 import com.smoothstack.common.services.CommonLibraryTestingService;
@@ -8,7 +9,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.smoothstack.restaurantmicroservice.exception.*;
 import org.junit.jupiter.api.*;
 
 import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;

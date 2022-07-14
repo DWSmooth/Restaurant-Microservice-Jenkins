@@ -1,13 +1,13 @@
 package com.smoothstack.restaurantmicroservice.service;
 
 import com.google.common.base.Strings;
+import com.smoothstack.common.exceptions.*;
 import com.smoothstack.common.models.Location;
 import com.smoothstack.common.models.Restaurant;
 import com.smoothstack.common.models.RestaurantTag;
 import com.smoothstack.common.repositories.*;
 
 import com.smoothstack.restaurantmicroservice.data.*;
-import com.smoothstack.restaurantmicroservice.exception.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
