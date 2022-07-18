@@ -1,6 +1,7 @@
 package com.smoothstack.restaurantmicroservice.service;
 
 import com.google.common.base.Strings;
+import com.smoothstack.common.exceptions.*;
 import com.smoothstack.common.models.MenuItem;
 import com.smoothstack.common.models.Restaurant;
 import com.smoothstack.common.repositories.MenuItemRepository;
@@ -8,16 +9,13 @@ import com.smoothstack.common.repositories.RestaurantRepository;
 
 import com.smoothstack.restaurantmicroservice.data.MenuItemInformation;
 import com.smoothstack.restaurantmicroservice.data.MenuItemParams;
-import com.smoothstack.restaurantmicroservice.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -50,7 +48,7 @@ public class MenuItemService {
 
 
     @Transactional
-    public List<MenuItemInformation> getRestaurantMenu(Integer restaurantId) throws RestaurantNotFoundException{
+    public List<MenuItemInformation> getRestaurantMenu(Integer restaurantId) throws RestaurantNotFoundException {
         List<MenuItemInformation> restaurantMenuItems = new ArrayList<MenuItemInformation>();
         List<MenuItem> dbMenuItems = new ArrayList<MenuItem>();
         Restaurant restaurant = new Restaurant();

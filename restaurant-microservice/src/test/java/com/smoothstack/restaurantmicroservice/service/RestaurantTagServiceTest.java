@@ -1,5 +1,6 @@
 package com.smoothstack.restaurantmicroservice.service;
 
+import com.smoothstack.common.exceptions.*;
 import com.smoothstack.common.models.*;
 import com.smoothstack.common.repositories.*;
 import com.smoothstack.common.services.CommonLibraryTestingService;
@@ -8,8 +9,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.smoothstack.restaurantmicroservice.exception.RestaurantTagAlreadyExistsException;
-import com.smoothstack.restaurantmicroservice.exception.RestaurantTagNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;

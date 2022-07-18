@@ -1,9 +1,8 @@
 package com.smoothstack.restaurantmicroservice.service;
 
+import com.smoothstack.common.exceptions.*;
 import com.smoothstack.common.models.RestaurantTag;
 import com.smoothstack.common.repositories.RestaurantTagRepository;
-import com.smoothstack.restaurantmicroservice.exception.RestaurantTagAlreadyExistsException;
-import com.smoothstack.restaurantmicroservice.exception.RestaurantTagNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

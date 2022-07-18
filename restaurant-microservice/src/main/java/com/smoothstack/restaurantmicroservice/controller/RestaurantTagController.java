@@ -1,7 +1,7 @@
 package com.smoothstack.restaurantmicroservice.controller;
 
+import com.smoothstack.common.exceptions.*;
 import com.smoothstack.common.models.RestaurantTag;
-import com.smoothstack.restaurantmicroservice.exception.*;
 import com.smoothstack.restaurantmicroservice.service.RestaurantTagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

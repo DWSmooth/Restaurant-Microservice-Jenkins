@@ -2,11 +2,9 @@ package com.smoothstack.restaurantmicroservice.controller;
 
 import java.util.List;
 
-import com.smoothstack.common.models.MenuItem;
-import com.smoothstack.common.models.Restaurant;
+import com.smoothstack.common.exceptions.*;
 import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
 import com.smoothstack.restaurantmicroservice.data.RestaurantsParams;
-import com.smoothstack.restaurantmicroservice.exception.*;
 import com.smoothstack.restaurantmicroservice.service.RestaurantService;
 
 import org.springframework.beans.factory.annotation.Autowired;

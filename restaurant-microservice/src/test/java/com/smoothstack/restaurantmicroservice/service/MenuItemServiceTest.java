@@ -1,22 +1,17 @@
 package com.smoothstack.restaurantmicroservice.service;
 
 import com.google.common.collect.Ordering;
+import com.smoothstack.common.exceptions.*;
 import com.smoothstack.common.models.*;
 import com.smoothstack.common.repositories.*;
 import com.smoothstack.common.services.CommonLibraryTestingService;
 
-import static org.apache.commons.lang.StringUtils.leftPad;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.smoothstack.restaurantmicroservice.data.MenuItemParams;
-//import com.smoothstack.restaurantmicroservice.data.UpdatedMenuItemRepository;
-import com.smoothstack.restaurantmicroservice.exception.MenuItemNotFoundException;
-import com.smoothstack.restaurantmicroservice.exception.RestaurantNotFoundException;
-
 import com.smoothstack.restaurantmicroservice.data.MenuItemInformation;
 import org.junit.jupiter.api.*;
-import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;

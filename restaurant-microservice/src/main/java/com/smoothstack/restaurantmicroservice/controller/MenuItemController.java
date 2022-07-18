@@ -2,17 +2,11 @@ package com.smoothstack.restaurantmicroservice.controller;
 
 import java.util.List;
 
+import com.smoothstack.common.exceptions.*;
 import com.smoothstack.common.models.MenuItem;
-
 import com.smoothstack.restaurantmicroservice.data.MenuItemInformation;
 import com.smoothstack.restaurantmicroservice.data.MenuItemParams;
-import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
-import com.smoothstack.restaurantmicroservice.data.RestaurantsParams;
-import com.smoothstack.restaurantmicroservice.exception.InvalidSearchException;
-import com.smoothstack.restaurantmicroservice.exception.MenuItemNotFoundException;
-import com.smoothstack.restaurantmicroservice.exception.RestaurantNotFoundException;
 import com.smoothstack.restaurantmicroservice.service.MenuItemService;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,7 +50,7 @@ public class MenuItemController {
     }
 
     @PutMapping(value = "restaurant/menuItem/{menuItemId}")
-    public ResponseEntity<String>updateMenuItem(@RequestBody MenuItem menuItem, @PathVariable Integer menuItemId) throws MenuItemNotFoundException{
+    public ResponseEntity<String>updateMenuItem(@RequestBody MenuItem menuItem, @PathVariable Integer menuItemId) throws MenuItemNotFoundException {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(menuItemService.updateGivenMenuItem(menuItem, menuItemId));
         } catch ( MenuItemNotFoundException menuItemNotFoundException){
