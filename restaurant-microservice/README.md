@@ -102,6 +102,70 @@ Restaurant Reviews - customer reviews for restaurants.
                         "restaurant_name": "Taqueria I"
                     }
                 ]
+                
+###         /restaurant/search - get restaurants by search parameters
+             
+             body parameters - all optional
+                 [
+                     {
+                        "location":"",
+                        "query":"",
+                        "sort":"",
+                        "min_rating":"",
+                        "max_rating":"",
+                        "min_dist":"",
+                        "max_dist":"",
+                        "tags":""
+                     {
+                 ]
+                 
+            will return:
+                {
+                    "restaurantId": 1,
+                    "location_id": 1,
+                    "owner_id": 1,
+                    "name": "Spaghetti Warehouse",
+                    "location_name": "Happy Buddha",
+                    "address": "4901 61st Street",
+                    "city": "Galveston",
+                    "state": "TX",
+                    "zip_code": 12345,
+                    "owner_name": "John McClane",
+                    "restaurantTags": [
+                        "Asian"
+                    ]
+                }
+                
+###         /restaurant/{restaurantId}/menuItems/search - get menu items from specific restaurant by search parameters
+             
+             body parameters - all optional
+                 [
+                     {
+                        "query":"",
+                        "sort":"",
+                        "min_price":"",
+                        "max_price":""
+                     }
+                 ]
+                 
+            will return:
+                {
+                     "itemId": 1,
+                     "restaurants_id": 1,
+                     "name": "Shrimp Fried Rice",
+                     "description": "fired rice with shrimp, choice of spicy or non spicy",
+                     "price": 4.25,
+                     "restaurant_name": "Taqueria I"
+                },
+                {
+                    "itemId": 10,
+                    "restaurants_id": 1,
+                    "name": "BBQ Potato",
+                    "description": "potatoe baked, with barbecue topping",
+                    "price": 5.5,
+                    "restaurant_name": "Taqueria I"
+                }
+            
 
 ## POST
 ###        /restaurant - Create a restaurant
