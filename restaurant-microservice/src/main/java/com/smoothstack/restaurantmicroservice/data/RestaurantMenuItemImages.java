@@ -5,15 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MenuItemParams {
-    String query;
-    String sort;
-    BigDecimal min_price;
-    BigDecimal max_price;
+public class RestaurantMenuItemImages {
+
+    private RestaurantInformation restaurantInformation;
+
+    private MenuItemInformation menuItemInformation;
+
+    private List<Image> images;
 }

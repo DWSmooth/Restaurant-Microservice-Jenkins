@@ -9,8 +9,8 @@ import com.smoothstack.common.services.CommonLibraryTestingService;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.smoothstack.restaurantmicroservice.data.MenuItemParams;
 import com.smoothstack.restaurantmicroservice.data.MenuItemInformation;
+import com.smoothstack.restaurantmicroservice.data.MenuItemParams;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
