@@ -1,5 +1,6 @@
 package com.smoothstack.restaurantmicroservice.service;
 
+import com.smoothstack.common.exceptions.*;
 import com.smoothstack.common.models.*;
 import com.smoothstack.common.repositories.*;
 import com.smoothstack.common.services.CommonLibraryTestingService;
@@ -8,10 +9,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.smoothstack.restaurantmicroservice.exception.*;
+import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
 import org.junit.jupiter.api.*;
 
-import com.smoothstack.restaurantmicroservice.data.RestaurantInformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;

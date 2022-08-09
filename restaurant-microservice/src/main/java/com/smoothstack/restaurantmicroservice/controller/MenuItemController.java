@@ -2,13 +2,11 @@ package com.smoothstack.restaurantmicroservice.controller;
 
 import java.util.List;
 
+import com.smoothstack.common.exceptions.*;
 import com.smoothstack.common.models.MenuItem;
-
 import com.smoothstack.restaurantmicroservice.data.MenuItemInformation;
-import com.smoothstack.restaurantmicroservice.exception.MenuItemNotFoundException;
-import com.smoothstack.restaurantmicroservice.exception.RestaurantNotFoundException;
+import com.smoothstack.restaurantmicroservice.data.MenuItemParams;
 import com.smoothstack.restaurantmicroservice.service.MenuItemService;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,9 +50,27 @@ public class MenuItemController {
     }
 
     @PutMapping(value = "restaurant/menuItem/{menuItemId}")
-    public ResponseEntity<String>updateMenuItem(@RequestBody MenuItem menuItem, @PathVariable Integer menuItemId) throws MenuItemNotFoundException{
+    public ResponseEntity<String>updateMenuItem(@RequestBody MenuItem menuItem, @PathVariable Integer menuItemId) throws MenuItemNotFoundException {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(menuItemService.updateGivenMenuItem(menuItem, menuItemId));
+        } catch ( MenuItemNotFoundException menuItemNotFoundException){
+            return new ResponseEntity(menuItemNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(value = "restaurant/menuItem/{menuItemId}/enable")
+    public ResponseEntity<String>enableMenuItem(@PathVariable Integer menuItemId) throws MenuItemNotFoundException{
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(menuItemService.enableGivenMenuItem(menuItemId));
+        } catch ( MenuItemNotFoundException menuItemNotFoundException){
+            return new ResponseEntity(menuItemNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(value = "restaurant/menuItem/{menuItemId}/disable")
+    public ResponseEntity<String>disableMenuItem(@PathVariable Integer menuItemId) throws MenuItemNotFoundException{
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(menuItemService.disableGivenMenuItem(menuItemId));
         } catch ( MenuItemNotFoundException menuItemNotFoundException){
             return new ResponseEntity(menuItemNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -66,6 +82,17 @@ public class MenuItemController {
             return ResponseEntity.status(HttpStatus.OK).body(menuItemService.deleteGivenMenuItem(menuItemId));
         } catch ( MenuItemNotFoundException menuItemNotFoundException){
             return new ResponseEntity(menuItemNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "/restaurant/{restaurantId}/menuItems/search")
+    public ResponseEntity<List<MenuItemInformation>> searchRestaurantsMenuItems(@PathVariable Integer restaurantId, @RequestBody MenuItemParams menuItemsSearch) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(menuItemService.findMenuItems(restaurantId, menuItemsSearch));
+        } catch (InvalidSearchException invalidSearchException) {
+            return new ResponseEntity(invalidSearchException.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

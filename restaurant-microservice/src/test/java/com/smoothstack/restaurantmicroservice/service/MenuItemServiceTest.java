@@ -1,5 +1,7 @@
 package com.smoothstack.restaurantmicroservice.service;
 
+import com.google.common.collect.Ordering;
+import com.smoothstack.common.exceptions.*;
 import com.smoothstack.common.models.*;
 import com.smoothstack.common.repositories.*;
 import com.smoothstack.common.services.CommonLibraryTestingService;
@@ -7,17 +9,17 @@ import com.smoothstack.common.services.CommonLibraryTestingService;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.smoothstack.restaurantmicroservice.exception.MenuItemNotFoundException;
-import com.smoothstack.restaurantmicroservice.exception.RestaurantNotFoundException;
-
 import com.smoothstack.restaurantmicroservice.data.MenuItemInformation;
+import com.smoothstack.restaurantmicroservice.data.MenuItemParams;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,8 +34,10 @@ public class MenuItemServiceTest {
     MenuItemRepository menuItemRepository;
     @Autowired
     RestaurantRepository restaurantRepository;
+
     @Autowired
     CommonLibraryTestingService testingService;
+
 
     @BeforeEach
 //    @Disabled
@@ -159,6 +163,26 @@ public class MenuItemServiceTest {
     }
 
     @Test
+    public void enableMenuItemTest() {
+        // TODO
+    }
+
+    @Test
+    public void enableAlreadyEnabledMenuItemTest() {
+        // TODO
+    }
+
+    @Test
+    public void disableMenuItemTest() {
+        // TODO
+    }
+
+    @Test
+    public void disableAlreadyDisabledMenuItemTest() {
+        // TODO
+    }
+
+    @Test
 //    @Disabled
     public void confirmsDeletedMenuItem(){
         Optional<MenuItem> dbMenuItem = menuItemRepository.findById(1);
@@ -181,6 +205,62 @@ public class MenuItemServiceTest {
 
         assertTrue(notFoundExceptionThrown);
     }
+
+    @Test
+    void searchMenuItemsNoParams() {
+        MenuItemParams params = new MenuItemParams(null, null, null, null);
+        List<MenuItemInformation> menuItems = menuItemService.findMenuItems(1, params);
+        assertEquals(menuItems.size(), 5);
+    }
+
+    @Test
+    void searchMenuItemsParamsQuery() {
+        MenuItemParams params = new MenuItemParams("thai", null, null, null);
+        List<MenuItemInformation> menuItems = menuItemService.findMenuItems(1, params);
+        assertEquals(menuItems.size(), 1);
+    }
+
+    @Test
+    void searchMenuItemsParamsSort() {
+
+        Comparator<MenuItemInformation> menuItemInformationComparator = new Comparator<MenuItemInformation>() {
+            @Override
+            public int compare(MenuItemInformation o1, MenuItemInformation o2) {
+                return o1.getPrice() < o2.getPrice() ? -1 : o1.getPrice() == o2.getPrice() ? 0 : 1;
+            }
+        };
+
+        MenuItemParams params1 = new MenuItemParams(null, "price.a", null, null);
+        List<MenuItemInformation> menuItems1 = menuItemService.findMenuItems(1, params1);
+        assertEquals(menuItems1.size(), 5);
+        assertTrue(Ordering.from(menuItemInformationComparator).isOrdered(menuItems1));
+
+
+        MenuItemParams params2 = new MenuItemParams(null, "price.d", null, null);
+        List<MenuItemInformation> menuItems2 = menuItemService.findMenuItems(1, params2);
+        assertEquals(menuItems2.size(), 5);
+        assertTrue(Ordering.from(menuItemInformationComparator).reverse().isOrdered(menuItems2));
+
+    }
+
+    @Test
+    void searchMenuItemsParamsMinPrice() {
+        MenuItemParams params1 = new MenuItemParams(null, null, BigDecimal.valueOf(8), null);
+        List<MenuItemInformation> menuItems1 = menuItemService.findMenuItems(1, params1);
+        assertEquals(menuItems1.size(), 2);
+        menuItems1.forEach(m -> assertTrue(m.getPrice() >= 8));
+    }
+
+    @Test
+    void searchMenuItemsParamsMaxPrice() {
+        MenuItemParams params1 = new MenuItemParams(null, null, null, BigDecimal.valueOf(8.50));
+        List<MenuItemInformation> menuItems1 = menuItemService.findMenuItems(1, params1);
+        assertEquals(menuItems1.size(), 3);
+        menuItems1.forEach(m -> assertTrue(m.getPrice() <= 8.50));
+    }
+
+
+
 
     @AfterEach
     @Disabled
