@@ -6,13 +6,6 @@ pipeline {
     agent any
 
     stages {
-        
-        stage("Repository Branch Switch") {
-            steps {
-                // execute git branch switch
-                sh 'git checkout dev'
-            }
-        }
 
         stage("Install Common Library") {
             steps {
@@ -21,6 +14,7 @@ pipeline {
                 // cd to the common library repo root
                 sh 'cd Common-Library/'
                 // switch to common library dev branch
+                sh 'git status'
                 sh 'git checkout dev'
                 // maven clean install
                 sh 'mvn clean install'
@@ -32,7 +26,7 @@ pipeline {
         stage("Build And Run Microservice") {
             steps {
                 // cd to the main repo package
-                sh 'cd restaurant-microservice/'
+                sh 'cd restaurant-microservice'
                 // maven clean package to produce jar
                 sh 'mvn clean package'
                 // cd to build folder
