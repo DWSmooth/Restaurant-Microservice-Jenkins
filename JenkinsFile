@@ -17,6 +17,7 @@ pipeline {
                 sh 'git status'
                 sh 'git checkout dev'
                 // maven clean install
+                sh 'ls -la'
                 sh 'mvn clean install'
                 // switch back to main repo root
                 sh 'cd ..'
