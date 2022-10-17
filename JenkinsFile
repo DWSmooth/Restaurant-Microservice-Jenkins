@@ -1,0 +1,69 @@
+pipeline {
+
+    /*
+    * Use any available Jenkins agent
+    */
+    agent any
+
+    stages {
+        
+        stage("Repository Branch Switch") {
+            steps {
+                // execute git branch switch
+                sh 'git checkout dev'
+            }
+        }
+
+        stage("Install Common Library") {
+            steps {
+                // clone the common library git repo
+                sh 'git clone https://github.com/April2022-J-Capstone/Common-Library.git'
+                // cd to the common library repo root
+                sh 'cd Common-Library/'
+                // switch to common library dev branch
+                sh 'git checkout dev'
+                // maven clean install
+                sh 'mvn clean install'
+                // switch back to main repo root
+                sh 'cd ..'
+            }
+        }
+
+        stage("Build And Run Microservice") {
+            steps {
+                // cd to the main repo package
+                sh 'cd restaurant-microservice/'
+                // maven clean package to produce jar
+                sh 'mvn clean package'
+                // cd to build folder
+                sh 'cd target/'
+                // run microservice
+                sh 'JARNAME=$(find . -regex "\.\/.*.jar")'
+                sh 'java $JARNAME &>/dev/null &'
+                echo "Microservice starting"
+                // cd back to main repo root
+                sh 'cd ..'
+                sh 'cd ..'
+            }
+        }
+
+        // stage("Test Microservice ") {
+        //     steps {
+        //         // clone the test repo
+        //         sh 'git clone {testGitRepoURL}'
+        //         // cd to the test repo root
+        //         sh 'cd {testGitRepoName}'
+        //         // run the test suite
+        //         // sh 'python {testEntryPoint}.py'
+        //     }
+        // }
+
+    }
+
+    post {
+        always {
+            sh 'rm -rf Common-Library/'
+            // sh 'rm -rf {testGitRepoURL}'
+        }
+    }
+}
