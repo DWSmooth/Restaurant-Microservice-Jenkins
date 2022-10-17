@@ -22,21 +22,24 @@ pipeline {
             }
         }
 
-        stage("Build And Run Microservice") {
+        stage("Build Microservice") {
             steps {
                 // cd to the main repo package
-                sh 'cd restaurant-microservice'
-                // maven clean package to produce jar
-                sh 'mvn clean package'
-                // cd to build folder
-                sh 'cd target/'
-                // run microservice
-                sh 'JARNAME=$(find . -name "*.jar")'
-                sh 'java $JARNAME &>/dev/null &'
-                echo "Microservice starting"
-                // cd back to main repo root
-                sh 'cd ..'
-                sh 'cd ..'
+                dir("restaurant-microservice") {
+                    // maven clean package to produce jar
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
+        stage("Run Microservice") {
+            steps {
+                dir("restaurant-microservice/target") {
+                    // run microservice
+                    sh 'JARNAME=$(find . -name "*.jar")'
+                    sh 'java $JARNAME &>/dev/null &'
+                    echo "Microservice starting"
+                }
             }
         }
 
@@ -45,9 +48,10 @@ pipeline {
         //         // clone the test repo
         //         sh 'git clone {testGitRepoURL}'
         //         // cd to the test repo root
-        //         sh 'cd {testGitRepoName}'
-        //         // run the test suite
-        //         // sh 'python {testEntryPoint}.py'
+        //         dir("{testGitRepoName}") {
+        //             // run the test suite
+        //             sh 'python {testEntryPoint}.py'
+        //         }
         //     }
         // }
 
