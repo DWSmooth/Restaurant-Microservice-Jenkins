@@ -38,7 +38,6 @@ pipeline {
                     // run microservice
                     sh 'JARNAME=$(find . -name "*.jar")'
                     sh 'java $JARNAME &>/dev/null &'
-                    echo "Microservice starting"
                 }
             }
         }
