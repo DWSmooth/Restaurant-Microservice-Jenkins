@@ -38,7 +38,7 @@ pipeline {
                 // cd to build folder
                 sh 'cd target/'
                 // run microservice
-                sh 'JARNAME=$(find . -regex "\.\/.*.jar")'
+                sh 'JARNAME=$(find . -name "*.jar")'
                 sh 'java $JARNAME &>/dev/null &'
                 echo "Microservice starting"
                 // cd back to main repo root
