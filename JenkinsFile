@@ -36,8 +36,7 @@ pipeline {
             steps {
                 dir("restaurant-microservice/target") {
                     // run microservice
-                    sh 'JARNAME=$(find . -name "*.jar")'
-                    sh 'java $JARNAME &>/dev/null &'
+                    sh 'java $(find . -name "*.jar") &>/dev/null &'
                 }
             }
         }
