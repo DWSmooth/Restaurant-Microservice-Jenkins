@@ -16,7 +16,7 @@ pipeline {
                 // switch to common library dev branch
                 sh 'git checkout dev'
                 // maven clean install
-                sh 'mvn clean install -f ./Common-Library/pom.xml'
+                sh 'mvn clean install -f Common-Library/pom.xml'
                 // switch back to main repo root
                 sh 'cd ..'
             }
