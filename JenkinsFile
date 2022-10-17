@@ -13,11 +13,11 @@ pipeline {
                 sh 'git clone https://github.com/April2022-J-Capstone/Common-Library.git'
                 // cd to the common library repo root
                 dir("Common-Library") {
-                    sh 'ls -aoUgh'
                     // switch to common library dev branch
                     sh 'git checkout dev'
+                    sh 'ls -aoUgh'
                     // maven clean install
-                    sh 'mvn -e clean install'
+                    sh 'mvn -X clean install'
                 }
             }
         }
