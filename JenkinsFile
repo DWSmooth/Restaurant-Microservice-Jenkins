@@ -20,7 +20,7 @@ pipeline {
                 // cd to the main repo package
                 dir("restaurant-microservice") {
                     // maven clean package to produce jar
-                    sh 'mvn clean package'
+                    sh 'mvn -X clean package'
                 }
             }
         }
