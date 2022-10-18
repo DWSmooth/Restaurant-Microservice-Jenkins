@@ -13,7 +13,7 @@ pipeline {
                     // switch to common library dev branch
                     sh 'git checkout dev'
                     // maven clean install
-                    sh 'mvn -X clean install'
+                    sh 'mvn clean install'
                 }
             }
         }
