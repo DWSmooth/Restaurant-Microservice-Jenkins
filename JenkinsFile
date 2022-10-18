@@ -1,9 +1,6 @@
 pipeline {
-
     agent any
-
     stages {
-
         stage("Install Common Library") {
             steps {
                 // clone the common library git repo
@@ -18,7 +15,6 @@ pipeline {
                 }
             }
         }
-
         stage("Build Microservice") {
             steps {
                 // cd to the main repo package
@@ -28,7 +24,6 @@ pipeline {
                 }
             }
         }
-
         stage("Run Microservice") {
             steps {
                 dir("restaurant-microservice/target") {
@@ -37,25 +32,10 @@ pipeline {
                 }
             }
         }
-
-        // stage("Test Microservice ") {
-        //     steps {
-        //         // clone the test repo
-        //         sh 'git clone {testGitRepoURL}'
-        //         // cd to the test repo root
-        //         dir("{testGitRepoName}") {
-        //             // run the test suite
-        //             sh 'python {testEntryPoint}.py'
-        //         }
-        //     }
-        // }
-
     }
-
     post {
         always {
             sh 'rm -rf Common-Library/'
-            // sh 'rm -rf {testGitRepoURL}'
         }
     }
 }
