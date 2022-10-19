@@ -10,12 +10,12 @@ pipeline {
                     // switch to common library dev branch
                     sh 'git checkout dev'
                     // maven clean install
-                    sh 'mvn -XB clean install'
+                    sh 'mvn -X -B clean install'
                     sh 'ls -aough'
                 }
                 dir("restaurant-microservice") {
                     // maven clean package to produce jar
-                    sh 'mvn -XB clean package'
+                    sh 'mvn -X -B clean package'
                     // publish package
                     // archive package?
                 }
