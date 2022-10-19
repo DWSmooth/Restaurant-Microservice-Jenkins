@@ -10,22 +10,28 @@ pipeline {
                     // switch to common library dev branch
                     sh 'git checkout dev'
                     // maven clean install
-                    sh 'mvn -x clean install'
+                    sh 'mvn -XB clean install'
                     sh 'ls -aough'
                 }
-            }
-        }
-        stage("build microservice") {
-            steps {
-                // cd to the main repo package
                 dir("restaurant-microservice") {
                     // maven clean package to produce jar
-                    sh 'mvn -x clean package'
+                    sh 'mvn -XB clean package'
                     // publish package
                     // archive package?
                 }
             }
         }
+        // stage("build microservice") {
+        //     steps {
+        //         // cd to the main repo package
+        //         dir("restaurant-microservice") {
+        //             // maven clean package to produce jar
+        //             sh 'mvn -XB clean package'
+        //             // publish package
+        //             // archive package?
+        //         }
+        //     }
+        // }
     }
     post {
         always {
