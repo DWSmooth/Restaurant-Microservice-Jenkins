@@ -4,13 +4,13 @@ pipeline {
         stage("install common library") {
             steps {
                 // clone the common library git repo
-                sh 'git clone https://github.com/april2022-j-capstone/common-library.git'
+                bat 'git clone https://github.com/april2022-j-capstone/common-library.git'
                 // cd to the common library repo root
                 dir("common-library") {
                     // switch to common library dev branch
-                    sh 'git checkout dev'
+                    bat 'git checkout dev'
                     // maven clean install
-                    sh 'mvn -X clean install'
+                    bat 'mvn -X clean install'
                     // sh 'ls -aough'
                 }
                 // dir("restaurant-microservice") {
@@ -26,7 +26,7 @@ pipeline {
                 // cd to the main repo package
                 dir("restaurant-microservice") {
                     // maven clean package to produce jar
-                    sh 'mvn -X clean package'
+                    bat 'mvn -X clean package'
                     // publish package
                     // archive package?
                 }
@@ -35,7 +35,7 @@ pipeline {
     }
     post {
         always {
-            sh 'rm -rf common-library/'
+            bat 'powershell -c "Remove-Item \'Common-Library/\' -Recurse'
         }
     }
 }
