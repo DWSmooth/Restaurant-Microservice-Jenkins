@@ -1,16 +1,41 @@
 pipeline {
     agent any
     stages {
+        stage("install common library") {
+            steps {
+                // clone the common library git repo
+                sh 'git clone https://github.com/april2022-j-capstone/common-library.git'
+                // cd to the common library repo root
+                dir("common-library") {
+                    // switch to common library dev branch
+                    sh 'git checkout dev'
+                    // maven clean install
+                    sh 'mvn -X clean install'
+                    // sh 'ls -aough'
+                }
+                // dir("restaurant-microservice") {
+                //     // maven clean package to produce jar
+                //     sh 'mvn -X clean package'
+                //     // publish package
+                //     // archive package?
+                // }
+            }
+        }
         stage("build microservice") {
             steps {
                 // cd to the main repo package
                 dir("restaurant-microservice") {
                     // maven clean package to produce jar
                     sh 'mvn -X clean package'
+                    // publish package
+                    // archive package?
                 }
-                // publish package
-                // archive package?
             }
+        }
+    }
+    post {
+        always {
+            sh 'rm -rf common-library/'
         }
     }
 }
