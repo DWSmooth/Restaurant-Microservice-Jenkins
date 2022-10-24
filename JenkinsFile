@@ -35,7 +35,7 @@ pipeline {
     }
     post {
         always {
-            bat 'powershell -c "Remove-Item \'common-library/\' -Recurse'
+            bat 'powershell -c "Remove-Item \'Common-Library/\' -Recurse'
         }
     }
 }
