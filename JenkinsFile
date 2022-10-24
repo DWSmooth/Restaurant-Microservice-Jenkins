@@ -24,10 +24,10 @@ pipeline {
                     bat 'mvn -X clean package'
                     //archiveArtifacts artifacts: 'target/*.jar'
                     // Make docker image and push to ECR
-                    bat 'powershell -c aws ecr get-login-password --region us-east-1 | docker login --username DougWalter --password-stdin 347673321751.dkr.ecr.us-east-1.amazonaws.com'
-                    bat 'powershell -c docker build -t scrumbags-user .'
-                    bat 'powershell -c docker tag scrumbags-user:latest 347673321751.dkr.ecr.us-east-1.amazonaws.com/scrumbags-restaurant:latest'
-                    bat 'powershell -c docker push 347673321751.dkr.ecr.us-east-1.amazonaws.com/scrumbags-restaurant:latest'
+                    bat 'aws ecr get-login-password --region us-east-1 | docker login --username DougWalter --password-stdin 347673321751.dkr.ecr.us-east-1.amazonaws.com'
+                    bat 'docker build -t scrumbags-user .'
+                    bat 'docker tag scrumbags-user:latest 347673321751.dkr.ecr.us-east-1.amazonaws.com/scrumbags-restaurant:latest'
+                    bat 'docker push 347673321751.dkr.ecr.us-east-1.amazonaws.com/scrumbags-restaurant:latest'
                     bat 'rmdir \"target\" /S /Q'
                     // Publish package?
                 }
