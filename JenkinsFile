@@ -3,29 +3,33 @@ pipeline {
     stages {
         stage("install common library") {
             steps {
-                // clone the common library git repo
+                // Remove Common-Library folder if it's already there
                 bat 'rmdir \"Common-Library\" /S /Q'
+                // Clone the common library git repo
                 bat 'git clone https://github.com/april2022-j-capstone/common-library.git'
-                // cd to the common library repo root
+                // Switch to the common library repo root
                 dir("Common-Library") {
-                    // switch to common library dev branch
+                    // Switch to common library dev branch
                     bat 'git checkout dev'
-                    // maven clean install
+                    // Maven clean install
                     bat 'mvn -X clean install'
-                    // sh 'ls -aough'
                 }
             }
         }
         stage("build microservice") {
             steps {
-                // cd to the main repo package
+                // Switch to the main repo package
                 dir("restaurant-microservice") {
-                    // maven clean package to produce jar
+                    // Maven clean package to produce jar
                     bat 'mvn -X clean package'
-                    archiveArtifacts artifacts: 'target/*.jar'
+                    //archiveArtifacts artifacts: 'target/*.jar'
+                    // Make docker image and push to ECR
+                    bat 'powershell -c "aws ecr get-login-password --region us-east-1 | docker login --username DougWalter --password-stdin 347673321751.dkr.ecr.us-east-1.amazonaws.com"'
+                    bat 'powershell -c "docker build -t scrumbags-user ."'
+                    bat 'powershell -c "docker tag scrumbags-user:latest 347673321751.dkr.ecr.us-east-1.amazonaws.com/scrumbags-restaurant:latest"'
+                    bat 'powershell -c "docker push 347673321751.dkr.ecr.us-east-1.amazonaws.com/scrumbags-restaurant:latest"'
                     bat 'rmdir \"target\" /S /Q'
-                    // publish package
-                    // archive package?
+                    // Publish package?
                 }
             }
         }
