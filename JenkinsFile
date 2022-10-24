@@ -4,6 +4,7 @@ pipeline {
         stage("install common library") {
             steps {
                 // clone the common library git repo
+                bat 'powershell -c "Remove-Item \'Common-Library/\' -Recurse"'
                 bat 'git clone https://github.com/april2022-j-capstone/common-library.git'
                 // cd to the common library repo root
                 dir("common-library") {
