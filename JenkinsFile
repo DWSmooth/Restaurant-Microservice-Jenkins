@@ -7,19 +7,13 @@ pipeline {
                 bat 'rmdir \"Common-Library\" /S /Q'
                 bat 'git clone https://github.com/april2022-j-capstone/common-library.git'
                 // cd to the common library repo root
-                dir("common-library") {
+                dir("Common-Library") {
                     // switch to common library dev branch
                     bat 'git checkout dev'
                     // maven clean install
                     bat 'mvn -X clean install'
                     // sh 'ls -aough'
                 }
-                // dir("restaurant-microservice") {
-                //     // maven clean package to produce jar
-                //     sh 'mvn -X clean package'
-                //     // publish package
-                //     // archive package?
-                // }
             }
         }
         stage("build microservice") {
@@ -28,7 +22,8 @@ pipeline {
                 dir("restaurant-microservice") {
                     // maven clean package to produce jar
                     bat 'mvn -X clean package'
-                    archiveArtifacts includes: '**.jar'
+                    archiveArtifacts artifacts: 'target/*.jar'
+                    bat 'rmdir \"target\" /S /Q'
                     // publish package
                     // archive package?
                 }
