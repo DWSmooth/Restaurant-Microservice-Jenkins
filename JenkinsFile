@@ -33,7 +33,6 @@ pipeline {
             steps {
                 // Make docker image and push to ECR
                 withAWS(profile:'myProfile') {
-                    echo "${ecrLogin()}"
                     pwsh script: "${ecrLogin()}"
                 }
                 pwsh script: 'docker build -t scrumbags-restaurant .'
