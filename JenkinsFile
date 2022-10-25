@@ -1,11 +1,14 @@
 pipeline {
     agent any
     stages {
+        stage("docker login") {
+            pwsh("aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 347673321751.dkr.ecr.us-east-1.amazonaws.com")
+        }
         stage("install common library") {
             steps {
-                withAWS(credentials:'ECRCreds') {
-                    echo "${ecrLogin()}"
-                }
+                // withAWS(credentials:'ECRCreds') {
+                //     echo "${ecrLogin()}"
+                // }
                 // Remove Common-Library folder if it's already there
                 // bat 'rmdir \"Common-Library\" /S /Q'
                 // Clone the common library git repo
@@ -32,9 +35,9 @@ pipeline {
         stage("publish build to ECR") {
             steps {
                 // Make docker image and push to ECR
-                withAWS(credentials:'ECRCreds') {
-                    pwsh script: "${ecrLogin()}"
-                }
+                // withAWS(credentials:'ECRCreds') {
+                //     pwsh script: "${ecrLogin()}"
+                // }
                 pwsh script: 'docker build -t scrumbags-restaurant .'
                 pwsh script: 'docker tag scrumbags-restaurant:latest 347673321751.dkr.ecr.us-east-1.amazonaws.com/scrumbags-restaurant:latest'
                 pwsh script: 'docker push 347673321751.dkr.ecr.us-east-1.amazonaws.com/scrumbags-restaurant:latest'
