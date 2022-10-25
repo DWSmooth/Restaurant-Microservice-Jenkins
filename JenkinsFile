@@ -13,7 +13,7 @@ pipeline {
                     //     def tempPswd = pswh("aws ecr get-login-password --region us-east-1 | echo")
                     // }
                     script {
-                        tempPswd = bat(
+                        tempPswd = pwsh(
                             returnStdout: true,
                             script: 'aws ecr get-login-password --region us-east-1'
                         )
