@@ -38,7 +38,7 @@ pipeline {
                     }
                     // Saved for quick recovery
                     // pwsh script: 'aws ecr get-login-password --region us-east-1 | docker login --username DougWalter --password-stdin 347673321751.dkr.ecr.us-east-1.amazonaws.com'
-                    pwsh script: 'echo $login | docker login --username DougWalter --password-stdin 347673321751.dkr.ecr.us-east-1.amazonaws.com'
+                    pwsh script: '$login'
                     pwsh script: 'docker build -t scrumbags-user .'
                     pwsh script: 'docker tag scrumbags-user:latest 347673321751.dkr.ecr.us-east-1.amazonaws.com/scrumbags-restaurant:latest'
                     pwsh script: 'docker push 347673321751.dkr.ecr.us-east-1.amazonaws.com/scrumbags-restaurant:latest'
