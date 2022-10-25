@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage("install common library") {
             steps {
-                withAWS(profile:'matrixrunner') {
+                withAWS(profile:'ECRCreds') {
                     echo "${ecrLogin()}"
                 }
                 // Remove Common-Library folder if it's already there
@@ -32,7 +32,7 @@ pipeline {
         stage("publish build to ECR") {
             steps {
                 // Make docker image and push to ECR
-                withAWS(profile:'matrixrunner') {
+                withAWS(profile:'ECRCreds') {
                     pwsh script: "${ecrLogin()}"
                 }
                 pwsh script: 'docker build -t scrumbags-restaurant .'
