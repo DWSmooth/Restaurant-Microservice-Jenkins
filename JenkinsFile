@@ -29,7 +29,7 @@ pipeline {
         stage("publish build to ECR") {
             steps {
                 // Make docker image and push to ECR
-                withAWS(profile:'matrixrunner') {
+                withAWS(profile:'myProfile') {
                     echo "${ecrLogin()}"
                     pwsh script: "${ecrLogin()}"
                 }
