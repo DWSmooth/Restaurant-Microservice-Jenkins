@@ -9,9 +9,13 @@ pipeline {
                 pwsh('echo "entered first stage!"')
                 withAWS(credentials:'ECRCreds') {
                     // pwsh('echo "have creds!"')
-                    script {
-                        def tempPswd = pswh("aws ecr get-login-password --region us-east-1 | echo")
-                    }
+                    // script {
+                    //     def tempPswd = pswh("aws ecr get-login-password --region us-east-1 | echo")
+                    // }
+                    tempPswd = bat(
+                        returnStdout: true,
+                        script: 'aws ecr get-login-password --region us-east-1'
+                    )
                     // pwsh('echo "script done!"')
                     // pwsh('echo "first one: ${tempPswd}"')
                     // pwsh('echo "second one: ${tempPswd}"')
