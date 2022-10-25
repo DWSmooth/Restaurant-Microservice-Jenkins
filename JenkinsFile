@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    options {
-        withAWS(profile:'matrixrunner')
-    }
     stages {
         stage("install common library") {
             steps {
@@ -32,8 +29,10 @@ pipeline {
         stage("publish build to ECR") {
             steps {
                 // Make docker image and push to ECR
-                echo "${ecrLogin()}"
-                pwsh script: "${ecrLogin()}"
+                withAWS(profile:'matrixrunner') {
+                    echo "${ecrLogin()}"
+                    pwsh script: "${ecrLogin()}"
+                }
                 pwsh script: 'docker build -t scrumbags-restaurant .'
                 pwsh script: 'docker tag scrumbags-restaurant:latest 347673321751.dkr.ecr.us-east-1.amazonaws.com/scrumbags-restaurant:latest'
                 pwsh script: 'docker push 347673321751.dkr.ecr.us-east-1.amazonaws.com/scrumbags-restaurant:latest'
