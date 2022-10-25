@@ -1,14 +1,17 @@
 pipeline {
     agent any
+    environment {
+        tempPswd = "${aws ecr get-login-password --region us-east-1}"
+    }
     stages {
         stage("docker login") {
             steps {
                 pwsh('echo "entered first stage!"')
                 withAWS(credentials:'ECRCreds') {
                     pwsh('echo "have creds!"')
-                    script {
-                        def tempPswd = "${aws ecr get-login-password --region us-east-1 | echo}"
-                    }
+                    // script {
+                    //     def tempPswd = "${aws ecr get-login-password --region us-east-1 | echo}"
+                    // }
                     pwsh('echo "script done!"')
                     pwsh('echo "first one: ${tempPswd}"')
                     pwsh('echo "second one: ${tempPswd}"')
