@@ -4,8 +4,10 @@ pipeline {
         stage("docker login") {
             steps {
                 pwsh('echo "entered first stage!"')
-                script {
-                    def tempPswd = pwsh("aws ecr get-login-password --region us-east-1 | echo")
+                withAWS(credentials:'ECRCreds') {
+                    script {
+                        def tempPswd = pwsh("aws ecr get-login-password --region us-east-1 | echo")
+                    }
                 }
                 pwsh('echo "temp password: $tempPswd"')
                 // pwsh("aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 347673321751.dkr.ecr.us-east-1.amazonaws.com")
