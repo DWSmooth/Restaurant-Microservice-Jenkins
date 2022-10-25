@@ -3,9 +3,9 @@ pipeline {
     stages {
         stage("install common library") {
             steps {
-                // withAWS(profile:'default') {
-                //     echo "${ecrLogin()}"
-                // }
+                withAWS(credentials:'ECRCreds') {
+                    echo "${ecrLogin()}"
+                }
                 // Remove Common-Library folder if it's already there
                 // bat 'rmdir \"Common-Library\" /S /Q'
                 // Clone the common library git repo
