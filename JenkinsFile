@@ -18,7 +18,7 @@ pipeline {
                             script: 'aws ecr get-login-password --region us-east-1'
                         )
                     }
-                    pwsh('echo "script done!"')
+                    pwsh("echo ${tempPswd}")
                     // pwsh('echo "first one: ${tempPswd}"')
                     // pwsh('echo "second one: ${tempPswd}"')
                     // pwsh("aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 347673321751.dkr.ecr.us-east-1.amazonaws.com")
