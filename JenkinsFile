@@ -7,6 +7,7 @@ pipeline {
                 withAWS(credentials:'ECRCreds') {
                     script {
                         def tempPswd = pwsh("${aws ecr get-login-password --region us-east-1}")
+                        echo $tempPswd
                     }
                     pwsh("echo \"first one: {$tempPswd}\"")
                 }
