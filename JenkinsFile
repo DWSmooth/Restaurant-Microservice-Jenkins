@@ -1,7 +1,7 @@
 pipeline {
     agent any
     options {
-        withAWS(credentials:'Doug W Creds')
+        withAWS(profile:'myProfile')
     }
     stages {
         stage("install common library") {
