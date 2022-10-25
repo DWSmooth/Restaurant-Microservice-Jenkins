@@ -33,7 +33,7 @@ pipeline {
             steps {
                 dir("restaurant-microservice") {
                     // Make docker image and push to ECR
-                    def login = ecrlogin()
+                    login = ecrlogin()
                     // Saved for quick recovery
                     // pwsh script: 'aws ecr get-login-password --region us-east-1 | docker login --username DougWalter --password-stdin 347673321751.dkr.ecr.us-east-1.amazonaws.com'
                     pwsh script: 'echo $login | docker login --username DougWalter --password-stdin 347673321751.dkr.ecr.us-east-1.amazonaws.com'
