@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage("install common library") {
             steps {
-                withAWS(profile:'myProfile') {
+                withAWS(profile:'matrixrunner') {
                     echo "${ecrLogin()}"
                 }
                 // Remove Common-Library folder if it's already there
