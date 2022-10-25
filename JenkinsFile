@@ -3,6 +3,7 @@ pipeline {
     stages {
         stage("docker login") {
             steps {
+                pwsh('entered first stage!')
                 script {
                     def tempPswd = pwsh("aws ecr get-login-password --region us-east-1 | echo")
                 }
