@@ -6,7 +6,7 @@ pipeline {
                 script {
                     def tempPswd = pwsh("aws ecr get-login-password --region us-east-1 | echo")
                 }
-                echo "temp password: $tempPswd"
+                bat 'echo "temp password: $tempPswd"'
                 // pwsh("aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 347673321751.dkr.ecr.us-east-1.amazonaws.com")
                 pwsh("echo $tempPswd | docker login --username AWS --password-stdin 347673321751.dkr.ecr.us-east-1.amazonaws.com")
             }
