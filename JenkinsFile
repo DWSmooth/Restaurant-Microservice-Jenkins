@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        tempPswd = "${aws ecr get-login-password --region us-east-1}"
+        tempPswd = "${powershell -c 'aws ecr get-login-password --region us-east-1'}"
     }
     stages {
         stage("docker login") {
