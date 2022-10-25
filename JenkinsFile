@@ -30,7 +30,11 @@ pipeline {
             steps {
                 // Make docker image and push to ECR
                 withAWS(profile:'myProfile') {
-                    pwsh script: '${ecrLogin()}'
+                    script {
+                        loginString = ecrLogin()
+                    }
+                    echo '$loginString'
+                    pwsh script: '$loginString'
                 }
                 pwsh script: 'docker build -t scrumbags-restaurant .'
                 pwsh script: 'docker tag scrumbags-restaurant:latest 347673321751.dkr.ecr.us-east-1.amazonaws.com/scrumbags-restaurant:latest'
