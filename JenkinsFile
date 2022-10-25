@@ -9,9 +9,9 @@ pipeline {
                         def tempPswd = pwsh("aws ecr get-login-password --region us-east-1 | echo")
                     }
                 }
-                pwsh('echo "temp password: $tempPswd"')
+                pwsh("echo {$tempPswd}")
                 // pwsh("aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 347673321751.dkr.ecr.us-east-1.amazonaws.com")
-                pwsh("echo $tempPswd | docker login --username AWS --password-stdin 347673321751.dkr.ecr.us-east-1.amazonaws.com")
+                pwsh("echo {$tempPswd} | docker login --username AWS --password-stdin 347673321751.dkr.ecr.us-east-1.amazonaws.com")
             }
         }
         stage("install common library") {
