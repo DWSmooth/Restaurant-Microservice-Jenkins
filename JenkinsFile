@@ -1,22 +1,22 @@
 pipeline {
     agent any
-    environment {
-        tempPswd = "${powershell -c 'aws ecr get-login-password --region us-east-1'}"
-    }
+    // environment {
+    //     tempPswd = "${powershell -c 'aws ecr get-login-password --region us-east-1'}"
+    // }
     stages {
         stage("docker login") {
             steps {
                 pwsh('echo "entered first stage!"')
                 withAWS(credentials:'ECRCreds') {
                     // pwsh('echo "have creds!"')
-                    // script {
-                    //     def tempPswd = "${aws ecr get-login-password --region us-east-1 | echo}"
-                    // }
+                    script {
+                        def tempPswd = "${aws ecr get-login-password --region us-east-1}"
+                    }
                     // pwsh('echo "script done!"')
                     // pwsh('echo "first one: ${tempPswd}"')
                     // pwsh('echo "second one: ${tempPswd}"')
                     // pwsh("aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 347673321751.dkr.ecr.us-east-1.amazonaws.com")
-                    pwsh("echo {$tempPswd} | docker login --username AWS --password-stdin 347673321751.dkr.ecr.us-east-1.amazonaws.com")
+                    pwsh("echo ${tempPswd} | docker login --username AWS --password-stdin 347673321751.dkr.ecr.us-east-1.amazonaws.com")
                 }
             }
         }
