@@ -1,7 +1,7 @@
 pipeline {
     agent any
     options {
-        withAWS(profile:'default')
+        withAWS(profile:'matrixrunner')
     }
     stages {
         stage("install common library") {
